@@ -1,0 +1,4 @@
+/* Detail-page contract. Homepage is deliberately not enrolled. */
+html[data-project] { --project-unit:calc(100vw / 1440); --project-board-height:calc(var(--project-unit) * 900); --project-page-space:calc(var(--project-unit) * 60); }
+html[data-project-layout="zoom"] { --project-unit:1px; }
+html[data-project] body { text-size-adjust:100%; -webkit-text-size-adjust:100%; }

@@ -1,0 +1,26 @@
+/* Reference lock: camon_40_series2.pptx, slide 2. Existing 1440px artboard scales this layout. */
+@font-face{font-family:"CAMON Mood Hurme";src:url("./assets/work/camon40/fonts/hurme-no3-regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"CAMON Mood Hurme";src:url("./assets/work/camon40/fonts/hurme-no3-semibold.otf") format("opentype");font-weight:600;font-style:normal;font-display:swap}
+.campaign-story.section{margin-top:0;padding-top:var(--gap);padding-bottom:0;background:var(--paper)}
+.campaign-moodboard{position:relative;width:100%;height:743.873px;background:#fff;overflow:hidden;isolation:isolate}
+.campaign-image{margin:0;overflow:hidden}
+.campaign-image img{display:block;width:100%;height:100%;object-fit:fill}
+.campaign-moodboard>.campaign-image{position:absolute}
+.campaign-mood-fashion{left:328.531px;top:65.015px;width:194.367px;height:193.691px}
+.campaign-mood-gift{left:1084.279px;top:76.890px;width:312.521px;height:631.055px}
+.campaign-mood-perfume{left:703.361px;top:108.533px;width:196.472px;height:195.194px}
+.campaign-mood-jewel{left:818.809px;top:414.215px;width:198.351px;height:225.785px}
+.campaign-mood-coast{left:0.000px;top:414.590px;width:239.164px;height:241.043px}
+.campaign-mood-water{left:419.100px;top:468.406px;width:224.432px;height:238.412px}
+.campaign-source-label{position:absolute;z-index:1;left:23.375px;top:20.519px;font:400 18.039px/1.2 "CAMON Mood Hurme",Arial,sans-serif}
+.campaign-title{position:absolute;z-index:2;left:86.436px;top:320.864px;width:1223.929px;display:flex;justify-content:space-between;gap:0;font-family:"CAMON Mood Hurme",Arial,sans-serif;font-size:90.194px;font-weight:600;line-height:1.15;letter-spacing:0;white-space:nowrap}
+/* Continuous gray gallery: each following panel retains its 60px top gap.
+   These outer wrappers add no second bottom gap; artwork interiors stay intact. */
+.campaign-page.section{padding-bottom:0;background:var(--paper)}
+.campaign-page .campaign-image{width:100%}
+.campaign-page .campaign-image img{height:auto;object-fit:contain}
+.campaign-closing.section{margin-top:0;padding-top:var(--gap);padding-bottom:var(--gap);background:var(--paper)}
+.campaign-closing-copy{margin-left:353.935px;width:1004.307px;font-family:"Microsoft YaHei",Arial,sans-serif}
+.campaign-placeholder{font-size:27.058px;line-height:1.4;overflow-wrap:anywhere}
+.campaign-team{margin-top:58px;font-size:21.045px;line-height:1.2}.campaign-team h3{font:inherit;margin-bottom:22px}.campaign-team strong{font-weight:700}
+.campaign-signature{margin-top:27px;text-align:right;font-size:21.045px;line-height:1.3}

@@ -1,0 +1,8 @@
+/* Decorative overlays preserve native glyph placement, wrapping and semantics. */
+.swarovski-text-positioned{position:relative}
+.swarovski-text-pending,.swarovski-text-active{color:transparent!important;text-shadow:none!important}
+.swarovski-text-layer{position:absolute;inset:0;display:block;pointer-events:none;user-select:none;text-align:left}
+.swarovski-text-line{position:absolute;left:0;width:100%;display:block;overflow:clip}
+.swarovski-text-char{position:absolute;top:0;display:block;white-space:pre;transform-origin:left bottom}
+@media(prefers-reduced-motion:reduce){.swarovski-text-layer{display:none}}
+@media print{.swarovski-text-pending,.swarovski-text-active{color:var(--ink)!important}.swarovski-text-layer{display:none}}

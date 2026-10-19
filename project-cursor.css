@@ -1,0 +1,19 @@
+/* Root-level cursor stays in screen pixels outside CAMON40's body zoom. */
+html[data-project] > .project-cursor {
+  position: fixed;
+  z-index: 2147483647;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  visibility: hidden;
+  background: transparent;
+  -webkit-backdrop-filter: grayscale(1) invert(1) contrast(100);
+  backdrop-filter: grayscale(1) invert(1) contrast(100);
+}
+@media (hover: hover) and (pointer: fine) and (forced-colors: none) {
+  html.project-cursor-active, html.project-cursor-active * { cursor: none !important; }
+  html.project-cursor-active > .project-cursor { visibility: visible; }
+}

@@ -1,0 +1,17 @@
+/* Title clearance includes its 1.15 line height, .06em glyph padding and calc(var(--project-unit) * 36) gap. */
+/* Final-design KV shares the following image's frame and page gutters. */
+.reveal-sequence { --reveal-title-space: calc(var(--project-title-size, 9vw) * 1.21 + calc(var(--project-unit) * 36)); --reveal-frame-height: calc((100vw - 2 * var(--edge)) * 9 / 16); margin-bottom: calc(var(--project-page-space) * 2); }
+.reveal-stage { position: relative; }
+.reveal-kv { width: calc(100vw - 2 * var(--edge)); height: var(--reveal-frame-height); margin-inline: var(--edge); overflow: hidden; overflow: clip; background: #fff; }
+.reveal-kv img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+.reveal-sequence:is(.is-preparing, .is-enhanced) { height: calc(var(--reveal-title-space) + var(--reveal-frame-height) + calc(var(--project-unit) * 900) * (var(--reveal-length) - 1)); }
+.reveal-sequence:is(.is-preparing, .is-enhanced) .reveal-stage { position: sticky; top: 0; height: calc(var(--reveal-title-space) + var(--reveal-frame-height)); isolation: isolate; }
+.reveal-sequence:is(.is-preparing, .is-enhanced) .reveal-kv { position: absolute; top: var(--reveal-title-space); left: 0; z-index: 1; transform: translate3d(0, calc(var(--project-unit) * 900), 0); }
+.reveal-sequence.is-active .reveal-kv { will-change: transform; }
+.reveal-sequence.is-unavailable .reveal-kv { display: none; }
+@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1) {
+  .reveal-sequence:is(.is-preparing, .is-enhanced) { height: auto; }
+  .reveal-sequence:is(.is-preparing, .is-enhanced) .reveal-stage { position: relative; height: auto; }
+  .reveal-sequence:is(.is-preparing, .is-enhanced) .reveal-kv { position: relative; top: auto; transform: none !important; }
+  .reveal-sequence.is-active .reveal-kv { will-change: auto; }
+}

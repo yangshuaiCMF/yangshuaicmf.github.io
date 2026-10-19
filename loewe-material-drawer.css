@@ -1,0 +1,22 @@
+/* One shared offset keeps the source image centered in the revealed right area. */
+.material-reveal { --drawer-size: var(--material-drawer-width, 28%); --drawer-offset: 0px; --drawer-progress: 0; position: relative; aspect-ratio: auto; overflow: visible; background: transparent; }
+.material-image-window { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; overflow: clip; }
+.material-reveal .material-main-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.material-drawer { background: #fff; color: #111; }
+.material-drawer-content { container-type: inline-size; max-width: calc(var(--project-unit) * 440); margin-inline: auto; padding: calc(var(--project-unit) * 36) calc(var(--project-unit) * 28); }
+.material-drawer h3 { margin: 0; font-family: Arial, "Microsoft YaHei", sans-serif; font-size: 7.5cqw; white-space: nowrap; font-weight: 700; line-height: 1.3; letter-spacing: -.025em; }
+.material-drawer p { margin: .45em 0 0; font-size: 4cqw; white-space: nowrap; line-height: 1.5; }
+.material-reveal .material-diagram { display: block; width: 92%; height: auto; margin: clamp(calc(var(--project-unit) * 20), 3.8vw, calc(var(--project-unit) * 54)) auto 0; object-fit: contain; }
+.material-drawer-toggle { position: absolute; z-index: 3; top: 50%; left: 0; display: block; width: 44px; min-height: max(44px, calc(var(--project-unit) * 124)); padding: calc(var(--project-unit) * 12) calc(var(--project-unit) * 6); border: 0; border-radius: 0; background: transparent; color: #111; transform: translate3d(var(--drawer-offset), -50%, 0); cursor: ew-resize; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.material-drawer-toggle[hidden] { display: none; }
+.material-drawer-toggle:focus-visible, .material-drawer:focus-visible { outline: calc(var(--project-unit) * 2) solid #111; outline-offset: calc(var(--project-unit) * -4); }
+.material-reveal.is-enhanced { aspect-ratio: 16 / 9; overflow: hidden; overflow: clip; }
+.material-reveal.is-enhanced .material-image-window { position: absolute; inset: 0; aspect-ratio: auto; clip-path: inset(0 0 0 var(--drawer-offset)); }
+.material-reveal.is-enhanced .material-main-image { transform: translate3d(calc(var(--drawer-offset) / 2), 0, 0); }
+.material-reveal.is-enhanced .material-drawer { position: absolute; inset: 0 auto 0 0; z-index: 2; width: var(--drawer-size); overflow-x: hidden; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #b9b9b9 #fff; transform: translate3d(calc(var(--drawer-offset) - 100%), 0, 0); }
+.material-reveal.is-enhanced .material-drawer-content { padding: clamp(calc(var(--project-unit) * 28), 8vw, calc(var(--project-unit) * 116)) clamp(calc(var(--project-unit) * 16), 1.9vw, calc(var(--project-unit) * 28)) clamp(calc(var(--project-unit) * 16), 2vw, calc(var(--project-unit) * 28)); }
+.material-reveal.is-drawer-moving .material-main-image, .material-reveal.is-drawer-moving .material-drawer, .material-reveal.is-drawer-moving .material-drawer-toggle { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .material-reveal.is-drawer-moving .material-main-image, .material-reveal.is-drawer-moving .material-drawer, .material-reveal.is-drawer-moving .material-drawer-toggle { will-change: auto; }
+}

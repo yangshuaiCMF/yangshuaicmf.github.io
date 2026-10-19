@@ -1,0 +1,29 @@
+/* Narrow display patches keep the original Chinese glyphs, scale and source assets.
+   The two-line raster labels become one line at the original English position. */
+.camon-title-patch {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.camon-title-patch.is-rise-black { z-index: 1; }
+/* Fade the image and its title correction as one composited group. */
+.camon30-restored .camon-evolution-intro {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+.camon-evolution-intro > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}

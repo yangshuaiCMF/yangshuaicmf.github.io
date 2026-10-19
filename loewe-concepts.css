@@ -1,0 +1,43 @@
+/* The overview entrance leads into one connected, opaque vertical image strip. */
+.chapter-one .chapter-title { margin-bottom: calc(var(--project-unit) * 36); }
+.concept-gallery {
+  --concept-frame-width: calc(100vw - 2 * var(--edge));
+  --concept-frame-height: calc(var(--concept-frame-width) * 9 / 16);
+  --concept-stage-height: max(calc(var(--project-unit) * 900), var(--concept-frame-height));
+  --overview-width: min(calc(100vw - 2 * var(--edge)), calc(var(--project-unit) * 1709.1));
+  position: relative;
+  background: var(--paper);
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+.concept-stage { position: relative; }
+.concept-heading { display: flow-root; }
+.concept-overview { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: calc(var(--overview-width) * .0087); width: var(--overview-width); height: calc(var(--overview-width) * 708 / 1724); margin: 0 auto calc(var(--project-unit) * 36); }
+.concept-card { display: flex; flex-direction: column; align-items: center; justify-content: space-between; min-width: 0; padding: calc(var(--overview-width) * .0365) 0 calc(var(--overview-width) * .0135); background: #fff; }
+.concept-card img { display: block; width: 60.5%; height: auto; aspect-ratio: 3558 / 7492; object-fit: contain; }
+.concept-card figcaption { font-size: calc(var(--overview-width) * .0112); line-height: 1.2; font-weight: 400; letter-spacing: -.02em; white-space: nowrap; }
+.concept-kvs { width: var(--concept-frame-width); margin-inline: auto; }
+.concept-slide { position: relative; margin-bottom: calc(var(--project-unit) * 36); scroll-margin-top: calc(var(--project-unit) * 20); }
+.concept-slide img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; }
+.concept-slide figcaption { position: absolute; width: calc(var(--project-unit) * 1); height: calc(var(--project-unit) * 1); overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.concept-gallery.is-enhanced { overflow-anchor: none; height: calc(var(--concept-stage-height) + calc(var(--project-unit) * 900) * (var(--concept-length) - 1)); }
+.concept-gallery.is-enhanced .concept-stage { position: sticky; top: 0; height: var(--concept-stage-height); overflow: hidden; overflow: clip; isolation: isolate; }
+.concept-gallery.is-enhanced .concept-heading { position: absolute; inset: 0 0 auto; }
+.concept-gallery.is-enhanced .concept-overview { position: absolute; top: 0; left: calc((100% - var(--overview-width)) / 2); margin: 0; }
+/* Each image fills the same 16:9 aperture; adjacent images share an edge. */
+.concept-gallery.is-enhanced .concept-kvs { position: absolute; top: calc((var(--concept-stage-height) - var(--concept-frame-height)) / 2); left: var(--edge); width: var(--concept-frame-width); height: var(--concept-frame-height); margin: 0; overflow: hidden; overflow: clip; pointer-events: none; }
+.concept-gallery.is-enhanced .concept-track { display: flex; flex-direction: column; height: 100%; transform: translate3d(0, 100%, 0); }
+.concept-gallery.is-enhanced .concept-slide { flex: 0 0 100%; height: 100%; margin: 0; background: var(--paper); }
+.concept-gallery.is-enhanced .concept-slide img { width: 100%; height: 100%; object-fit: contain; }
+.concept-gallery.is-moving .concept-heading, .concept-gallery.is-moving .concept-overview { will-change: transform, opacity; }
+.concept-gallery.is-moving .concept-track { will-change: transform; }
+@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1) {
+  .concept-gallery.is-enhanced { height: auto; }
+  .concept-gallery.is-enhanced .concept-stage { position: relative; height: auto; overflow: visible; }
+  .concept-gallery.is-enhanced .concept-heading, .concept-gallery.is-enhanced .concept-overview, .concept-gallery.is-enhanced .concept-kvs, .concept-gallery.is-enhanced .concept-track, .concept-gallery.is-enhanced .concept-slide { position: relative; inset: auto; transform: none !important; opacity: 1 !important; visibility: visible !important; }
+  .concept-gallery.is-enhanced .concept-overview { margin: 0 auto calc(var(--project-unit) * 36); }
+  .concept-gallery.is-enhanced .concept-kvs, .concept-gallery.is-enhanced .concept-track { display: block; height: auto; overflow: visible; }
+  .concept-gallery.is-enhanced .concept-kvs { margin-inline: auto; }
+  .concept-gallery.is-enhanced .concept-slide { height: auto; margin-bottom: calc(var(--project-unit) * 36); }
+  .concept-gallery.is-enhanced .concept-slide img { height: auto; }
+}

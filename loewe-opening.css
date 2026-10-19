@@ -1,0 +1,36 @@
+/* Opening only. The existing case-study layout retains its original rules. */
+.opening-sequence { position: relative; background: var(--paper); }
+.opening-stage { position: relative; }
+.opening-heading { height: calc(var(--project-unit) * 900); display: grid; place-items: center; padding: calc(var(--project-unit) * 24); text-align: center; }
+.opening-heading h1 { font-size: clamp(calc(var(--project-unit) * 26), 2.7vw, calc(var(--project-unit) * 58)); line-height: 1.12; letter-spacing: -.025em; font-weight: 700; }
+.opening-heading h1 span { display: block; }
+.opening-film { position: relative; height: calc(var(--project-unit) * 900); overflow: hidden; background: #e7eae6; }
+.opening-poster, .opening-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+.opening-video { transform: translateZ(0); }
+.opening-enhanced .opening-video { opacity: 0; }
+.opening-enhanced .opening-video.is-playing { opacity: 1; }
+.opening-enhanced .opening-sequence { --opening-stage-height: max(var(--project-board-height), 100svh); height: calc(var(--opening-stage-height) + var(--project-unit) * 2025); }
+.opening-enhanced .opening-stage { position: sticky; top: 0; height: var(--opening-stage-height); overflow: hidden; overflow: clip; isolation: isolate; }
+.opening-enhanced .opening-heading { position: absolute; inset: 0; z-index: 2; height: 100%; pointer-events: none; }
+.opening-enhanced .opening-film { position: absolute; inset: auto 0 0; height: var(--project-board-height); transform-origin: 50% 0; transform: translate3d(0, calc(var(--project-unit) * 927), 0) scale(.38); }
+.opening-sequence.is-active .opening-heading, .opening-sequence.is-active .opening-film { will-change: transform, opacity; }
+.film-control { position: absolute; z-index: 3; right: calc(var(--project-unit) * 24); bottom: calc(var(--project-unit) * 24); min-width: calc(var(--project-unit) * 104); min-height: calc(var(--project-unit) * 44); padding: 0 calc(var(--project-unit) * 16); border: calc(var(--project-unit) * 1) solid #d6d6d6; border-radius: 0; background: #fff; color: #080808; font: calc(var(--project-unit) * 12) Arial, Helvetica, sans-serif; cursor: pointer; }
+.film-control[hidden] { display: none; }
+.film-control:hover { background: #ededed; }
+.film-control:focus-visible { outline: calc(var(--project-unit) * 2) solid #080808; outline-offset: calc(var(--project-unit) * 4); }
+.project-overview { padding: var(--project-page-space) 4.1vw; display: grid; grid-template-columns: 1fr 1fr; column-gap: 9vw; align-items: start; background: var(--paper); font-family: Arial, 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif; }
+.overview-heading p { font-size: clamp(calc(var(--project-unit) * 18), 1.9vw, calc(var(--project-unit) * 32)); line-height: 1.3; margin-bottom: calc(var(--project-unit) * 4); }
+.overview-heading h2 { font-size: clamp(calc(var(--project-unit) * 24), 2.55vw, calc(var(--project-unit) * 44)); line-height: 1.25; font-weight: 500; }
+.overview-body { padding-top: calc(var(--project-unit) * 166.5); max-width: calc(var(--project-unit) * 640); }
+.overview-body h3 { max-width: 15em; margin: 0 0 calc(var(--project-unit) * 28); font-size: clamp(calc(var(--project-unit) * 26), 2.55vw, calc(var(--project-unit) * 44)); font-weight: 500; line-height: 1.3; }
+.overview-last-word { white-space: nowrap; }
+.overview-body p { margin: 0 0 calc(var(--project-unit) * 22); font-size: clamp(calc(var(--project-unit) * 16), 1.5vw, calc(var(--project-unit) * 24)); line-height: 1.45; }
+.overview-body p:last-child { margin-bottom: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .opening-enhanced .opening-sequence { height: auto; }
+  .opening-enhanced .opening-stage { position: relative; height: auto; overflow: visible; }
+  .opening-enhanced .opening-heading { position: relative; height: calc(var(--project-unit) * 900); transform: none !important; opacity: 1 !important; }
+  .opening-enhanced .opening-film { position: relative; height: calc(var(--project-unit) * 900); transform: none !important; clip-path: none !important; }
+  .opening-sequence.is-active .opening-heading, .opening-sequence.is-active .opening-film { will-change: auto; }
+}

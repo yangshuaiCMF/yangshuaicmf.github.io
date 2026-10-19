@@ -1,0 +1,39 @@
+/* The opening follows Loewe; all subsequent case-study boards retain their rules. */
+.camon-opening-nav {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  padding: 0 1.5vw;
+  color: #080808;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.camon-opening-nav nav { display: flex; align-items: center; justify-content: space-between; }
+.camon-opening-nav a { display: inline-flex; align-items: center; min-height: calc(var(--project-unit) * 44); font-size: clamp(calc(var(--project-unit) * 10), .94vw, calc(var(--project-unit) * 15)); text-underline-offset: calc(var(--project-unit) * 4); }
+.camon-opening-nav a:first-child { font-weight: 700; }
+.camon-opening-nav a:hover { text-decoration: underline; }
+.camon-opening-nav a:focus-visible { outline: calc(var(--project-unit) * 2) solid #080808; outline-offset: calc(var(--project-unit) * 5); }
+.camon30-restored #page-01.camon-opening { position: relative; height: auto; min-height: 0; aspect-ratio: auto; background: #fff; color: #080808; }
+.camon-opening-stage { position: relative; }
+.camon-opening-heading { height: calc(var(--project-unit) * 900); display: grid; place-items: center; padding: calc(var(--project-unit) * 24); text-align: center; }
+.camon-opening-heading h1 { margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: clamp(calc(var(--project-unit) * 26), 2.7vw, calc(var(--project-unit) * 58)); line-height: 1.12; letter-spacing: -.025em; font-weight: 700; }
+.camon-opening-heading h1 span { display: block; }
+.camon-opening-heading ::selection { color: #fff; background: #111; }
+.camon-opening-image { position: relative; margin: 0; height: calc(var(--project-unit) * 900); overflow: hidden; background: #fff; }
+.camon-opening-image img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
+.camon-opening-enhanced .camon30-restored #page-01.camon-opening { height: calc(var(--project-unit) * 2925); }
+.camon-opening-enhanced .camon-opening-stage { position: sticky; top: 0; height: calc(var(--project-unit) * 900); overflow: clip; isolation: isolate; }
+.camon-opening-enhanced .camon-opening-heading { position: absolute; inset: 0; z-index: 2; height: 100%; pointer-events: none; }
+.camon-opening-enhanced .camon-opening-image { position: absolute; inset: 0; height: 100%; transform-origin: 50% 0; transform: translate3d(0, calc(var(--project-unit) * 927), 0) scale(.38); }
+.camon-opening.is-active .camon-opening-heading,
+.camon-opening.is-active .camon-opening-image { will-change: transform, opacity; }
+/* Back serves the title screen; the existing floating Home returns for the case study. */
+.camon-opening-enhanced .camon-at-opening .camon-home-fab { visibility: hidden; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1) {
+  .camon-opening-enhanced .camon30-restored #page-01.camon-opening { height: auto; }
+  .camon-opening-enhanced .camon-opening-stage { position: relative; height: auto; overflow: visible; }
+  .camon-opening-enhanced .camon-opening-heading { position: relative; height: calc(var(--project-unit) * 900); transform: none !important; opacity: 1 !important; }
+  .camon-opening-enhanced .camon-opening-image { position: relative; height: calc(var(--project-unit) * 900); transform: none !important; }
+  .camon-opening.is-active .camon-opening-heading,
+  .camon-opening.is-active .camon-opening-image { will-change: auto; }
+}

@@ -1,0 +1,38 @@
+/* Shared LOEWE closing layout; project artboards retain their own content. */
+html[data-project] .project-footer {
+  --footer-hit: calc(44px * var(--project-ui-inverse, 1));
+  display: flex;
+  flex-direction: column;
+  padding: var(--project-page-space) calc(var(--project-unit) * 21.6);
+  margin: 0;
+  background: #ececee;
+  color: #080808;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.project-footer .footer-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  gap: calc(var(--project-unit) * 16);
+  margin: 0;
+  padding: 0;
+  font-size: calc(var(--project-unit) * 13.536);
+  font-weight: 400;
+  line-height: normal;
+}
+.project-footer .closing-media + .footer-meta { margin-top: calc(var(--project-page-space) * 2); }
+.project-footer a { color: inherit; text-decoration: none; text-underline-offset: calc(var(--project-unit) * 4); }
+.project-footer a:hover { text-decoration: underline; }
+.project-footer a:focus-visible { outline: calc(2px * var(--project-ui-inverse, 1)) solid #080808; outline-offset: calc(5px * var(--project-ui-inverse, 1)); }
+.project-footer .footer-back, .project-footer .footer-next { display: inline-flex; align-items: center; min-height: var(--footer-hit); min-width: var(--footer-hit); }
+.project-footer .footer-back { justify-self: start; }
+.project-footer .footer-next { justify-content: flex-end; opacity: 1; }
+.project-footer .footer-next[aria-disabled="true"] { cursor: default; }
+.project-footer .footer-contact { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: var(--footer-hit); margin: 0; font-style: normal; line-height: 1.65; }
+.project-footer .footer-contact a { white-space: nowrap; }
+.project-footer .footer-actions { display: flex; flex-direction: column; align-items: flex-end; min-width: 0; }
+.project-footer .sling-top { zoom: var(--project-ui-inverse, 1); margin: 8px 7px 32px; }
+.project-footer .sling-top .footer-top:focus-visible { outline: 2px solid #000; outline-offset: 10px; }
+.project-footer .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+html.project-footer-visible .camon-home-fab { visibility: hidden; pointer-events: none; }

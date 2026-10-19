@@ -1,0 +1,8 @@
+/* Decorative overlays preserve native glyph placement, wrapping and semantics. */
+.camon-text-positioned{position:relative}
+.camon-text-pending,.camon-text-active{color:transparent!important;text-shadow:none!important}
+.camon-text-layer{position:absolute;inset:0;display:block;pointer-events:none;user-select:none;text-align:left}
+.camon-text-line{position:absolute;left:0;width:100%;display:block;overflow:clip}
+.camon-text-char{position:absolute;top:0;display:block;white-space:pre;transform-origin:left bottom}
+@media(prefers-reduced-motion:reduce){.camon-text-layer{display:none}}
+@media print{.camon-text-pending,.camon-text-active{color:var(--ink)!important}.camon-text-layer{display:none}}

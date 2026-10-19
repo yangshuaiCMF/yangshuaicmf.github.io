@@ -1,0 +1,32 @@
+/* INS frame and phone geometry are taken from the supplied PPT, not recreated artwork. */
+.scene.section{margin-top:0;padding:var(--gap) var(--edge);min-height:0;display:grid;align-content:start;background:var(--paper)}
+.ins-card{--ins-ratio:1.87774041;position:relative;width:100%;aspect-ratio:11800840/6284595;overflow:clip;background:var(--paper);isolation:isolate;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+/* Clip the phone layer itself to the PPT photo aperture, including subpixel card edges. */
+.ins-photo{position:absolute;inset:0;clip-path:inset(11.2274655355% 1.599702381% 16.7550371156% 1.599702381%)}
+.ins-phone{position:absolute;display:block;max-width:none;object-fit:contain;transform-origin:50% 50%;pointer-events:none;user-select:none}
+.ins-green{left:28.6301%;top:3.44625%;width:39.8021%;height:29.4284%;transform:rotate(-22deg)}
+.ins-black{left:27.656%;top:30.966089832%;width:42.8589%;height:36.1327%;transform:rotate(27deg)}
+.ins-white{left:33.3187%;top:64.0695240252%;width:34.8722%;height:29.4284%;transform:rotate(-19deg)}
+.is-ins-prepared .ins-phone,.is-ins-playing .ins-phone{will-change:transform}
+.ins-mask{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+.ins-ui{position:absolute;z-index:3;pointer-events:none;user-select:none}
+.ins-avatar{left:1.87796%;top:2.4856%;width:3.4223%;height:6.7091%}
+.ins-account{left:5.8491%;top:1.39436%;width:12.1718%;height:8.912%}
+.ins-actions{left:1.87258%;top:83.8032%;width:8.62032%;height:4.11235%;clip-path:inset(0 0 0 28.36%)}
+.ins-bookmark{left:94.505%;top:83.7123%;width:3.54068%;height:4.41548%}
+.ins-social-copy{left:1.87258%;top:88.3%;font-size:14.55px;line-height:1.1;color:#080808}
+.ins-social-copy p+p{font-size:10.875px;margin-top:2px}
+@media(prefers-reduced-motion:reduce){.is-ins-prepared .ins-phone,.is-ins-playing .ins-phone{will-change:auto}}
+
+/* Keep the original comment/share artwork; the heart is a native toggle. */
+.ins-like{position:absolute;left:3.0563%;top:85.5933%;z-index:4;width:44px;height:44px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;appearance:none;background:transparent;color:#11161a;cursor:pointer;pointer-events:auto;touch-action:manipulation;transform:translate(-50%,-50%);-webkit-tap-highlight-color:transparent}
+.ins-like svg{display:block;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;overflow:visible;pointer-events:none;transform-origin:center}
+.ins-like[aria-pressed="true"] svg{fill:#ed4956;stroke:none}
+.ins-like:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.ins-engagement{margin:28px 0 0 353.935px;width:1004.307px;font-size:21px;line-height:1.4;font-weight:400;text-align:left;text-wrap:pretty;color:var(--ink)}
+
+/* Independent tap hearts sit above the photo mask and UI, clipped only by the card. */
+.ins-heart-effects{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:clip}
+.ins-heart-burst{position:absolute;display:block;transform:translate(-50%,-50%);pointer-events:none}
+.ins-heart-burst svg{display:block;width:100%;height:100%;overflow:visible;transform-origin:50% 50%;will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){.ins-heart-burst svg{will-change:opacity}}
