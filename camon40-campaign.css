@@ -21,6 +21,7 @@
 .campaign-page .campaign-image img{height:auto;object-fit:contain}
 .campaign-closing.section{margin-top:0;padding-top:var(--gap);padding-bottom:var(--gap);background:var(--paper)}
 .campaign-closing-copy{margin-left:353.935px;width:1004.307px;font-family:"Microsoft YaHei",Arial,sans-serif}
-.campaign-placeholder{font-size:27.058px;line-height:1.4;overflow-wrap:anywhere}
-.campaign-team{margin-top:58px;font-size:21.045px;line-height:1.2}.campaign-team h3{font:inherit;margin-bottom:22px}.campaign-team strong{font-weight:700}
-.campaign-signature{margin-top:27px;text-align:right;font-size:21.045px;line-height:1.3}
+/* Summary follows the color-story body type; slide 2 credit spacing is retained. */
+.campaign-summary{font-size:21px;line-height:1.4;text-wrap:pretty;overflow-wrap:break-word}
+.campaign-team{margin-top:64.939px;font-size:21.045px;line-height:22.699px}.campaign-team h3{font:inherit;margin-bottom:22.699px}.campaign-team strong{font-weight:700}
+.campaign-signature{margin-top:25.254px;text-align:right;font-size:21.045px;line-height:32.470px}
