@@ -7,7 +7,7 @@
     '.opening-heading h1', '.hero-caption p',
     '.strategy-sheet h2', '.strategy-sheet h3', '.strategy-sheet h4', '.strategy-sheet p',
     '[data-title]', '.color-copy h3', '.color-english', '.color-description p',
-    '.ins-engagement', '.section-name', '.overview-body h3', '.overview-body p',
+    '.ins-engagement', '.campaign-summary', '.section-name', '.overview-body h3', '.overview-body p',
     '.evidence-text h3', '.evidence-text p', '.continuity h3', '.continuity p',
     '.section-intro p', '.decision-head h3', '.decision-head p',
     '.decision-notes h4', '.decision-notes p',

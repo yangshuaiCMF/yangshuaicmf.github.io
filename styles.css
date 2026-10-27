@@ -1846,14 +1846,15 @@ img {
 
 /* Stockholm Design Lab inspired Work index, adapted to black background. */
 .work-index {
-  padding: 128px var(--page-gutter) 148px;
+  --page-gutter: min(3.194444vw, 72px);
+  padding: min(8.888889vw, 128px) var(--page-gutter) min(10.277778vw, 148px);
   background: #050505;
   color: var(--text);
 }
 
 .work-heading {
   width: 100%;
-  margin: 0 0 clamp(64px, 10vw, 128px);
+  margin: 0 0 min(10vw, 128px);
 }
 
 .work-heading h2 {
@@ -1866,7 +1867,7 @@ img {
 }
 
 .work-series {
-  margin-top: clamp(84px, 11vw, 148px);
+  margin-top: min(11vw, 148px);
 }
 
 .work-series:first-of-type {
@@ -1874,8 +1875,8 @@ img {
 }
 
 .work-series h3 {
-  margin: 0 0 28px;
-  font-size: clamp(28px, 4vw, 58px);
+  margin: 0 0 min(1.944444vw, 28px);
+  font-size: min(4vw, 58px);
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.025em;
@@ -1884,7 +1885,7 @@ img {
 .work-tile-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(22px, 3vw, 42px);
+  gap: clamp(12px, 3vw, 42px);
 }
 
 .work-tile {
@@ -1901,7 +1902,7 @@ img {
     linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025)),
     #151515;
   color: rgba(255, 255, 255, 0.86);
-  font-size: clamp(42px, 7vw, 112px);
+  font-size: min(7vw, 112px);
   font-weight: 500;
   letter-spacing: -0.055em;
   line-height: 0.9;
@@ -1914,7 +1915,7 @@ img {
 }
 
 .work-tile p {
-  margin: 18px 0 0;
+  margin: min(1.25vw, 18px) 0 0;
   color: var(--text);
   font-size: clamp(22px, 2.4vw, 36px);
   font-weight: 400;
@@ -1977,13 +1978,6 @@ img {
     padding-right: var(--page-gutter);
   }
 
-  .work-tile-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .work-tile-visual {
-    aspect-ratio: 1.18 / 1;
-  }
 }
 
 .work-heading + .work-series {
@@ -2000,7 +1994,7 @@ img {
 .work-welcome h2 {
   margin: 0;
   max-width: none;
-  font-size: clamp(58px, 8vw, 112px);
+  font-size: min(8vw, 112px);
   font-weight: 500;
   line-height: 0.96;
   letter-spacing: -0.055em;
@@ -2076,14 +2070,14 @@ img {
   align-items: flex-end;
   justify-self: auto;
   width: min(100%, 940px);
-  margin: clamp(18px, 2vw, 28px) 0 0 auto;
+  margin: min(2vw, 28px) 0 0 auto;
   text-align: right;
 }
 
 .design-principles p {
   width: auto;
   max-width: 100%;
-  font-size: clamp(26px, 3.35vw, 54px);
+  font-size: min(3.35vw, 54px);
   line-height: 1.08;
   text-align: right;
   white-space: nowrap;
@@ -2105,7 +2099,7 @@ img {
 /* Bring the Work divider closer to the Selected Work label. */
 .work-index::before {
   margin-top: clamp(46px, 6vw, 82px);
-  margin-bottom: clamp(36px, 5vw, 62px);
+  margin-bottom: min(5vw, 62px);
 }
 
 /* Move Selected Work into the project list start. */
@@ -2114,14 +2108,14 @@ img {
 }
 
 .selected-work-heading {
-  margin: clamp(92px, 12vw, 156px) 0 clamp(46px, 5vw, 72px);
-  padding-top: clamp(42px, 5vw, 68px);
+  margin: min(12vw, 156px) 0 min(5vw, 72px);
+  padding-top: min(5vw, 68px);
   border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .selected-work-heading h2 {
   margin: 0;
-  font-size: clamp(58px, 8vw, 112px);
+  font-size: min(8vw, 112px);
   font-weight: 500;
   line-height: 0.96;
   letter-spacing: -0.055em;
@@ -2129,11 +2123,11 @@ img {
 
 /* Lower both Work divider lines. */
 .work-index::before {
-  margin-top: clamp(86px, 10vw, 140px);
+  margin-top: min(10vw, 140px);
 }
 
 .selected-work-heading {
-  margin-top: clamp(126px, 16vw, 220px);
+  margin-top: min(16vw, 220px);
 }
 
 /* Work tile media: static poster by default, muted loop video on hover. */
@@ -2200,12 +2194,12 @@ img {
 
 /* Reduce TECNO CAMON project subtitles by 30%. */
 .work-series:first-of-type .work-tile p {
-  font-size: clamp(15px, 1.68vw, 25px);
+  font-size: min(1.68vw, 25px);
 }
 
 /* Reduce all Work project subtitles consistently. */
 .work-tile p {
-  font-size: clamp(15px, 1.68vw, 25px);
+  font-size: min(1.68vw, 25px);
 }
 
 /* Global alignment refinement: clean top nav and full-width Hero grid. */
@@ -7540,18 +7534,37 @@ html[data-lang="zh"] .next-actions a {
   }
 }
 
-/* Hero four-line invariant and bottom-baseline lock - 2026-08-03 */
+/* Hero uses one scale for both text columns; retain the four-line desktop composition. */
+.hero {
+  --hero-unit: min(calc(100vw / 1440), 1.4373385px);
+  --page-gutter: min(3.194444vw, 72px);
+  display: flex;
+  flex-direction: column;
+  min-height: max(100svh, calc(950.1953125 * var(--hero-unit)));
+  padding: max(42px, calc(42 * var(--hero-unit))) var(--page-gutter) calc(70 * var(--hero-unit));
+}
+
+.hero-meta {
+  padding-top: clamp(28px, 3vw, 46px);
+  font-size: 11px;
+}
+
 .hero-grid {
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) calc(360 * var(--hero-unit));
+  gap: calc(40 * var(--hero-unit));
   align-items: end;
 }
 
 .hero-copy,
 .hero-panel {
+  min-width: 0;
   align-self: end;
 }
 
 .hero h1 {
-  font-size: clamp(28px, 8.6vw, 178px);
+  font-size: calc(123.84 * var(--hero-unit));
 }
 
 .hero h1 > span,
@@ -7564,26 +7577,55 @@ html[data-lang="zh"] .next-actions a {
   word-break: keep-all;
 }
 
-@media (max-width: 760px) {
+.hero-copy .eyebrow {
+  font-size: calc(12 * var(--hero-unit));
+  margin-bottom: calc(16 * var(--hero-unit));
+  transform: translateY(calc(12 * var(--hero-unit)));
+}
+
+.hero-panel {
+  width: calc(330 * var(--hero-unit));
+  max-width: 100%;
+  justify-self: end;
+}
+
+.hero-panel p {
+  font-size: calc(13 * var(--hero-unit));
+}
+
+.hero-actions {
+  gap: calc(18 * var(--hero-unit));
+  margin-top: calc(14 * var(--hero-unit));
+}
+
+.hero-actions a {
+  font-size: calc(12 * var(--hero-unit));
+}
+
+/* Narrow Hero: larger title, followed by right-aligned copy with one scaled gap. */
+@media (max-width: 980px) {
   .hero-grid {
-    grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
-    gap: 12px;
-    align-items: end;
+    flex: 1 0 auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: end;
+    row-gap: calc(60 * var(--hero-unit));
+    column-gap: 0;
   }
 
   .hero-copy,
   .hero-panel {
-    align-self: end;
+    grid-column: 1;
   }
 
   .hero h1 {
-    font-size: clamp(28px, 8.6vw, 64px);
+    font-size: calc(198.144 * var(--hero-unit));
   }
 
-  .hero-panel {
-    width: 100%;
-    max-width: none;
-    justify-self: stretch;
+  .hero-copy .eyebrow {
+    font-size: calc(19.2 * var(--hero-unit));
+    margin-bottom: calc(25.6 * var(--hero-unit));
+    transform: translateY(calc(19.2 * var(--hero-unit)));
   }
 }
 
