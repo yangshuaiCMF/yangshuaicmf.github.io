@@ -2233,6 +2233,14 @@ img {
   opacity: 1;
 }
 
+/* Touch movement returns to the cover immediately; the next play still fades in. */
+@media (hover: none) and (pointer: coarse) {
+  .work-tile-media:not(.is-playing) .work-tile-poster,
+  .work-tile-media:not(.is-playing) .work-tile-video {
+    transition: none;
+  }
+}
+
 .work-tile-poster-only .work-tile-poster {
   opacity: 1 !important;
 }

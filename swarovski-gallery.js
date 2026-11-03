@@ -14,17 +14,12 @@ function resumeReload(){
   start+=pause;previewStart+=pause;brakeStart+=pause;if(homeReturn)homeReturn.start+=pause;
   frameTime=now;reloadPausedAt=null;root.removeAttribute('data-reload-paused');schedule();
 }
-// Normal wheel/keyboard timing remains 1x. Held or click-latched middle-button
-// navigation and repeated mobile swipes run authored motion at 3x.
-let middleFast=false,touchFastUntil=0,touchFastTimer=0;
-function motionRate(now=performance.now()){return !reduce.matches&&(middleFast||now<touchFastUntil)?3:1;}
-function exposeMotionRate(now=performance.now()){root.dataset.motionRate=String(motionRate(now));}
+// Touch stays at the authored 1x speed. Desktop middle-button cruise retains 3x.
+const coarse=matchMedia('(hover: none) and (pointer: coarse)');
+let middleFast=false;
+function motionRate(){return !reduce.matches&&middleFast?3:1;}
+function exposeMotionRate(){const rate=String(motionRate());if(root.dataset.motionRate!==rate)root.dataset.motionRate=rate;}
 function setMiddleFast(active){middleFast=active;exposeMotionRate();if(active)schedule();}
-function resetTouchFast(){clearTimeout(touchFastTimer);touchFastTimer=0;touchFastUntil=0;exposeMotionRate();}
-function extendTouchFast(now=performance.now()){
-  touchFastUntil=now+550;clearTimeout(touchFastTimer);exposeMotionRate(now);schedule();
-  touchFastTimer=setTimeout(()=>{if(performance.now()>=touchFastUntil)resetTouchFast();},580);
-}
 exposeMotionRate();
 // Three 3x3 views: cols 0..2/rows 0..2 -> cols 2..4/rows 0..2 -> cols 2..4/rows 2..4.
 // Each leg retains exactly three cards and introduces six. Remaining cards sit beyond the right edge.
@@ -35,6 +30,20 @@ for(let r=0;r<3;r++)cells.push({r,c:5});
 const order=Array.from({length:cards.length},(_,i)=>i);[order[0],order[16]]=[order[16],order[0]];
 root.querySelector('.sg-title')?.remove();root.querySelector('.sg-focus')?.remove();root.removeAttribute('aria-labelledby');root.setAttribute('aria-label','联名设计与完整原稿');
 const viewport=document.createElement('div');viewport.className='sg-window';stage.append(viewport);
+const painted=new WeakMap();
+function paint(node,key,value){let state=painted.get(node);if(!state){state={};painted.set(node,state);}if(state[key]!==value){state[key]=value;node.style[key]=value;}}
+let galleryLoaded=false,entryReady=false,entryPending=false,entryTimeout=0,entryOrigin=0;
+function loadGallery(){
+  if(galleryLoaded)return;galleryLoaded=true;
+  const first=order.filter((_,cell)=>cells[cell].r<3&&cells[cell].c<3).map(i=>cards[i]);
+  for(const img of [...first,...cards.filter(img=>!first.includes(img))]){if(img.dataset.sgSrcset)img.srcset=img.dataset.sgSrcset;if(img.dataset.sgSrc)img.src=img.dataset.sgSrc;}
+  loadNear();
+  Promise.allSettled(first.map(img=>img.decode())).then(()=>{
+    entryReady=true;clearTimeout(entryTimeout);root.removeAttribute('data-loading');
+    const pending=entryPending;entryPending=false;const rect=root.getBoundingClientRect();
+    if(pending&&phase==='ready'&&Math.abs(scrollY-entryOrigin)<8&&rect.top<innerHeight&&rect.bottom>0)launch();
+  });
+}
 function remember(){seen=true;}
 function base(){return root.getBoundingClientRect().top+scrollY;}
 function jump(y){dissolveIntent=null;internalScrollUntil=performance.now()+150;scrollTo({top:y,left:0,behavior:'instant'});}
@@ -61,7 +70,7 @@ function setPageDissolve(pair,value){
   pair.page.style.pointerEvents=value===1?'auto':'none';
   pair.page.setAttribute('aria-hidden',String(value===0));pair.source.setAttribute('aria-hidden',String(value===1));
 }
-for(const pair of dissolves){pair.page.parentElement.classList.add('sg-dissolve-ready');pair.image.loading='eager';if(pair.step)pair.step.querySelector('img').loading='eager';setPageDissolve(pair,reduce.matches?1:0);}
+for(const pair of dissolves){pair.page.parentElement.classList.add('sg-dissolve-ready');setPageDissolve(pair,reduce.matches?1:0);}
 function clearPageFade(){
   if(pageFadeRaf)cancelAnimationFrame(pageFadeRaf);pageFadeRaf=0;
   if(pageFade)setPageDissolve(pageFade.pair,pageFade.progress>=.5?1:0);
@@ -89,9 +98,17 @@ function paintPageFade(now){
 async function preparePageFade(f){
   const images=[f.pair.source.querySelector('img'),f.pair.image];if(f.pair.step)images.push(f.pair.step.querySelector('img'));
   for(const image of images)image.loading='eager';
-  const loaded=await Promise.race([Promise.all(images.map(image=>image.decode())).then(()=>true,()=>false),new Promise(resolve=>setTimeout(()=>resolve(false),2500))]);
+  let decodedResult;
+  const decoded=Promise.all(images.map(image=>image.decode())).then(()=>true,()=>false).then(value=>{decodedResult=value;return value;});
+  const loaded=await Promise.race([decoded,new Promise(resolve=>setTimeout(()=>resolve(false),2500))]);
   if(pageFade!==f)return;
-  if(!loaded){f.pair.unavailable=true;f.progress=1;clearPageFade();return;}
+  if(!loaded){
+    // A slow download is recoverable: release the gesture, retain the visible frame.
+    f.pair.unavailable=images.some(image=>image.complete&&!image.naturalWidth);
+    f.pair.waiting=decodedResult===undefined;
+    if(f.pair.waiting)decoded.then(ok=>{f.pair.waiting=false;f.pair.unavailable=!ok&&images.some(image=>image.complete&&!image.naturalWidth);});
+    clearPageFade();return;
+  }
   f.mode='fade';f.time=performance.now();pageFadeRaf=requestAnimationFrame(paintPageFade);
 }
 function beginPageFade(pair,target,inWindow=false){
@@ -125,7 +142,7 @@ function dissolveInput(delta,e){
   const distance=dissolveIntent.target-scrollY;
   const ordered=delta>0?dissolves:[...dissolves].reverse();
   for(const pair of ordered){
-    if(pair.index<0||pair.unavailable||target===pair.value)continue;
+    if(pair.index<0||pair.unavailable||pair.waiting||target===pair.value)continue;
     const remaining=dissolveAnchor(pair)-scrollY;
     const crossing=delta>0?remaining>=-8&&remaining<=distance+1:remaining<=8&&remaining>=distance-1;
     if(!crossing)continue;
@@ -138,7 +155,7 @@ function advanceFlow(dt,speed){
   const next=Math.min(maxOffset(),offset+dt*speed);
   for(const pair of dissolves){
     const edge=pair.index*810;
-    if(pair.index>=0&&!pair.unavailable&&pair.value<1&&offset<=edge+.25&&next>=edge){offset=edge;beginPageFade(pair,1,true);return;}
+    if(pair.index>=0&&!pair.unavailable&&!pair.waiting&&pair.value<1&&offset<=edge+.25&&next>=edge){offset=edge;beginPageFade(pair,1,true);return;}
   }
   offset=next;
 }
@@ -146,9 +163,9 @@ function advanceFlow(dt,speed){
 const homePage=pageImages[0].parentElement,drawer=document.createElement('div');drawer.className='sg-drawer';
 for(const child of [...reader.children])if(child!==homePage)drawer.append(child);
 reader.append(drawer);homePage.classList.add('sg-home-layer');
-function paintHomeLayer(position){homePage.style.transform=`translateY(${Math.max(0,Math.min(810,position))}px)`;}
+function paintHomeLayer(position){paint(homePage,'transform',`translate3d(0,${Math.max(0,Math.min(810,position))}px,0)`);}
 // Native reading pins this same node with CSS, without a scroll/paint compensation loop.
-function loadNear(){const i=Math.floor(offset/810);if(i===loadedPage)return;loadedPage=i;pageImages.slice(Math.max(0,i-1),i+5).forEach(img=>img.loading='eager');}
+function loadNear(){if(!galleryLoaded)return;const i=Math.floor(offset/810);if(i===loadedPage)return;loadedPage=i;pageImages.slice(Math.max(0,i-1),i+3).forEach(img=>img.loading='eager');for(const pair of dissolves)if(pair.index>=i-1&&pair.index<=i+2){pair.image.loading='eager';if(pair.step)pair.step.querySelector('img').loading='eager';}}
 function maxOffset(height=810){return Math.max(0,pageImages.length*810-height);}
 function windowGeometry(scale,y,height=810,x=0){
 // The visible aperture changes during zoom/resize; never scroll past the strip's bottom.
@@ -156,10 +173,19 @@ height=Math.min(height,pageImages.length*810);
 const limit=maxOffset(height);offset=Math.max(0,Math.min(offset,limit));if(offset>=limit)flowSpeed=0;
 if(!pageFade&&phase!=='reading')for(const pair of dissolves)if(offset<pair.index*810-.5)setPageDissolve(pair,0);
 paintHomeLayer(offset);
-viewport.style.transform=`translate(${720*(1-scale)+x}px,${y}px) scale(${scale})`;viewport.style.height=height+'px';reader.style.transform=`translateY(${-offset}px)`;loadNear();}
-function toReading(scroll=true){const continueFade=pageFade?.kind==='window';if(!continueFade)clearPageFade();aligning=false;const b=base();homeReturn=null;windowReadTarget=null;readingReturnArmed=false;stopReadingApproach();setPhase('reading');remember();reader.style.transform='';root.append(reader);root.classList.add('sg-reading');viewport.style.opacity='0';settle=performance.now();if(scroll)jump(b+offset*z);unlockStage();homePage.style.transform='';readingLastY=scrollY;if(continueFade){pageFade.kind='reading';document.documentElement.classList.add('sg-dissolve-locked');}}
+paint(viewport,'transform',`translate3d(${720*(1-scale)+x}px,${y}px,0) scale(${scale})`);paint(viewport,'height',height+'px');paint(reader,'transform',`translate3d(0,${-offset}px,0)`);loadNear();}
+function toReading(scroll=true){const continueFade=pageFade?.kind==='window';if(!continueFade)clearPageFade();aligning=false;const b=base();homeReturn=null;windowReadTarget=null;readingReturnArmed=false;stopReadingApproach();setPhase('reading');remember();reader.style.transform='';painted.delete(reader);root.append(reader);root.classList.add('sg-reading');viewport.style.opacity='0';settle=performance.now();if(scroll)jump(b+offset*z);unlockStage();homePage.style.transform='';painted.delete(homePage);readingLastY=scrollY;if(continueFade){pageFade.kind='reading';document.documentElement.classList.add('sg-dissolve-locked');}}
 function cancel(){const b=base();offset=0;toReading(false);jump(Math.max(0,b-innerHeight*.8));settle=performance.now()+220;}
-function launch(){if(phase!=='ready')return;setPhase('entry');start=performance.now();jump(base());schedule();}
+function launch(){
+  if(phase!=='ready')return;loadGallery();
+  if(!entryReady){
+    if(!entryPending){entryPending=true;entryOrigin=scrollY;root.dataset.loading='images';entryTimeout=setTimeout(()=>{
+      if(entryPending&&phase==='ready'){entryPending=false;root.removeAttribute('data-loading');toReading(false);}
+    },5000);}
+    return;
+  }
+  setPhase('entry');start=performance.now();jump(base());schedule();
+}
 function travel(from,to,rest,duration){travelFrom=from;travelTo=to;travelRest=rest;travelDuration=duration;setPhase('travel');start=performance.now();schedule();}
 function retract(){reverseOffset=offset;retractElapsed=0;retractDirection=1;setPhase('retract');start=performance.now();schedule();}
 function expand(distance){if(phase==='preview'){setPhase('zoom');zoomProgress=zoomTarget=0;}if(phase==='brake')setPhase('zoom');if(phase!=='zoom')return;zoomTarget=clamp(zoomTarget+distance/Math.max(900,innerHeight*1.5));if(distance<0&&zoomTarget===0&&zoomProgress<.001)retract();schedule();}
@@ -207,12 +233,16 @@ function readWindow(dt){
   if(pageFade?.kind==='window')return true;
   if(windowReadTarget===null)return false;
   const next=offset+(windowReadTarget-offset)*(1-Math.exp(-dt/85));flowSpeed=0;
-  for(const pair of [...dissolves].reverse()){const edge=pair.index*810;if(!pair.unavailable&&pair.value>0&&offset>=edge-.25&&next<=edge){offset=edge;beginPageFade(pair,0,true);return true;}}
+  for(const pair of [...dissolves].reverse()){const edge=pair.index*810;if(!pair.unavailable&&!pair.waiting&&pair.value>0&&offset>=edge-.25&&next<=edge){offset=edge;beginPageFade(pair,0,true);return true;}}
   offset=next;
   if(Math.abs(offset-windowReadTarget)<.25){offset=windowReadTarget;if(offset===0)beginHomeReturn();}
   return true;
 }
-function size(){dissolveIntent=null;stopReadingApproach();readingReturnArmed=false;if(pageFade)finishPageFade(pageFade.progress>=.5?1:0);z=document.body.getBoundingClientRect().width/1440;h=innerHeight/z;root.style.setProperty('--sg-h',h+'px');if(stageLocked&&!aligning)jump(base());if(phase!=='reading'){if(reloadPausedAt!==null)draw(reloadPausedAt);else schedule();}}
+let measuredWidth=0,paintedCardsTime=-1,paintedCardsHeight=-1;
+function size(){
+  // Safari toolbar changes height during a swipe; they do not resize the artboard.
+  if(coarse.matches&&measuredWidth===innerWidth)return;
+  measuredWidth=innerWidth;dissolveIntent=null;stopReadingApproach();readingReturnArmed=false;if(pageFade)finishPageFade(pageFade.progress>=.5?1:0);z=document.body.getBoundingClientRect().width/1440;h=innerHeight/z;root.style.setProperty('--sg-h',h+'px');if(stageLocked&&!aligning)jump(base());if(phase!=='reading'){if(reloadPausedAt!==null)draw(reloadPausedAt);else schedule();}}
 // Early velocity peak, extended deceleration; zero velocity/acceleration at both ends.
 const glide=t=>t*t*t*(35+t*(-105+t*(126+t*(-70+15*t))));
 function draw(now){raf=0;if(phase==='reading'||reduce.matches)return;if(aligning){frameTime=now;schedule();return;}
@@ -226,6 +256,8 @@ const cardHeight=550*9/16,wideRowPitch=Math.max(355,h*.36);
 // Halve only the empty space between rows on narrow windows; keep card size and wide layouts.
 const narrow=innerWidth<=980,rowPitch=narrow?cardHeight+(wideRowPitch-cardHeight)*.5:wideRowPitch;
 let homeX=0,homeY=0,homeVisibility=1;
+if(!['preview','zoom','brake'].includes(phase)||t!==paintedCardsTime||h!==paintedCardsHeight){
+paintedCardsTime=t;paintedCardsHeight=h;
 order.forEach((idx,cell)=>{const {r,c}=cells[cell];const horizontal=glide(seg(t,rowStart[r],rowEnd[r]));// Vertical motion stays on each column's x axis; staggered columns create the reference's traveling wave.
 const column=((c-2)%3+3)%3;
 const vertical=glide(seg(t,[3360,3250,3310][column],[4480,4350,4420][column]));
@@ -235,7 +267,8 @@ const rowVisibility=narrow?1-smooth(seg(Math.abs(y),rowPitch+cardHeight*.5,2*row
 if(!selected){x+=Math.sign(x)*440*focus;y+=Math.sign(y)*300*focus;}
 x+=Math.sign(x||1)*260*(1-enter);y+=Math.sign(y||1)*200*(1-enter);
 if(selected){homeX=x;homeY=y;homeVisibility=rowVisibility;}
-cards[idx].style.width='550px';cards[idx].style.transform=`translate(-50%,-50%) translate(${x}px,${y}px) scale(${selected?1+(760/550-1)*focus:1-.68*focus})`;cards[idx].style.opacity=String(enter*(selected?0:1-leave)*rowVisibility);});
+cards[idx].style.transform=`translate(-50%,-50%) translate(${x}px,${y}px) scale(${selected?1+(760/550-1)*focus:1-.68*focus})`;cards[idx].style.opacity=String(enter*(selected?0:1-leave)*rowVisibility);});
+}
 const small=760/1440;
 viewport.style.opacity=String(['ready','entry','travel','backMiddle','exitReady'].includes(phase)?enter*homeVisibility:1);
 if(['ready','entry','retract','parked','travel','backMiddle','exitReady'].includes(phase)){offset=phase==='retract'?reverseOffset*(1-glide(clamp(retractElapsed/1950))):0;const landingScale=(550+210*focus)/1440;windowGeometry(landingScale,(h-810*landingScale)/2+homeY,810,homeX);if(t>=7280&&phase==='entry'){setPhase('preview');previewStart=now;settle=now+220;}}
@@ -251,7 +284,7 @@ if(phase==='zoom'){
 }
 if(phase==='zoom'||phase==='brake'){const braking=phase==='brake',b=braking?clamp((now-brakeStart)/450):0;const p=zoomProgress,scale=small+(1-small)*p;if(homeReturn){offset=0;flowSpeed=0;}else if(!readWindow(dt)){const target=previewFlowSpeed*small/scale;flowSpeed+=(target-flowSpeed)*(1-Math.exp(-dt/180));advanceFlow(dt,flowSpeed*(1-smooth(b))*(1-smooth(seg(p,.62,1))));}const height=810+(h-810)*p;windowGeometry(scale,(h-810*small)/2*(1-p),height);if(braking&&b===1){toReading();return;}}
 if(phase==='entry'||phase==='travel'||phase==='retract'||phase==='zoom'||phase==='brake'||phase==='preview'&&offset<maxOffset())schedule();}
-function mount(){root.classList.remove('sg-reading');viewport.append(reader);reader.style.transform='';offset=0;setPhase('ready');viewport.style.opacity='0';size();}
+function mount(){root.classList.remove('sg-reading');viewport.append(reader);reader.style.transform='';painted.delete(reader);offset=0;setPhase('ready');viewport.style.opacity='0';size();}
 root.classList.add('sg-ready');if(seen||reduce.matches||reloadGallery?.phase==='reading'){setPhase('reading');root.classList.add('sg-reading');}else mount();size();
 function input(direction,fresh,distance=100){if(pageFade?.kind==='window'){pageFade.target=direction>0?1:0;return;}if(phase==='entry'||phase==='travel')return;if(homeReturn){if(direction<0)return;homeReturn=null;zoomTarget=zoomProgress;}if(direction>0)windowReadTarget=null;if(['preview','parked','backMiddle','exitReady'].includes(phase)&&boundaryNeedsFresh){if(!fresh||performance.now()<settle)return;boundaryNeedsFresh=false;}if(phase==='retract'){retractDirection=direction<0?1:-1;schedule();return;}if(direction<0){if(['preview','zoom','brake'].includes(phase))rewindWindow(distance);else if(phase==='parked')travel(4480,3250,'backMiddle',1230);else if(phase==='backMiddle')travel(2450,0,'exitReady',2000);return;}if(phase==='exitReady'){travel(0,2450,'backMiddle',2000);return;}if(phase==='backMiddle'){travel(3250,4480,'parked',1230);return;}if(phase==='parked'){setPhase('entry');start=performance.now()-5330;schedule();return;}if(phase==='ready')launch();else if(phase==='zoom'||phase==='preview'&&fresh&&performance.now()>settle)expand(distance);}
 // Wheel and middle-button scrolling share the same content/boundary/animation owner.
@@ -334,43 +367,32 @@ addEventListener('pagehide',stopMiddleScroll);
 addEventListener('visibilitychange',()=>{if(document.hidden)stopMiddleScroll();});
 addEventListener('keydown',e=>{if(middleScroll){stopMiddleScroll();if(e.key==='Escape')e.preventDefault();}},{capture:true});
 
-// Mobile fast-reading intent. Ordinary single-finger scrolling stays native; only a
-// burst of three qualifying same-direction flicks raises authored motion to 3x.
-let fastTouch=null,touchBurst={direction:0,count:0,first:0,lastEnd:-Infinity};
-function resetTouchBurst(clearFast=true){fastTouch=null;touchBurst={direction:0,count:0,first:0,lastEnd:-Infinity};if(clearFast)resetTouchFast();}
-addEventListener('touchstart',e=>{
-  if(e.touches.length!==1){resetTouchBurst();return;}
-  const t=e.touches[0],now=performance.now();
-  if(now-touchBurst.lastEnd>360){touchBurst={direction:0,count:0,first:0,lastEnd:-Infinity};resetTouchFast();}
-  fastTouch={startX:t.clientX,startY:t.clientY,x:t.clientX,y:t.clientY,start:now};
-},{passive:true,capture:true});
-addEventListener('touchmove',e=>{
-  if(!fastTouch||e.touches.length!==1)return;
-  const t=e.touches[0],now=performance.now();fastTouch.x=t.clientX;fastTouch.y=t.clientY;
-  const dy=fastTouch.startY-fastTouch.y,dx=fastTouch.x-fastTouch.startX,duration=now-fastTouch.start,direction=Math.sign(dy);
-  if(direction&&touchBurst.direction&&direction!==touchBurst.direction)resetTouchFast();
-  const qualifies=duration>=80&&duration<=420&&Math.abs(dy)>=60&&Math.abs(dy)>=Math.abs(dx)*1.5&&Math.abs(dy)/duration>=.45;
-  if(qualifies&&touchBurst.count>=2&&direction===touchBurst.direction&&now-touchBurst.first<=1100)extendTouchFast(now);
-},{passive:true,capture:true});
-addEventListener('touchend',()=>{
-  if(!fastTouch)return;
-  const now=performance.now(),duration=now-fastTouch.start,dy=fastTouch.startY-fastTouch.y,dx=fastTouch.x-fastTouch.startX,direction=Math.sign(dy);
-  const qualifies=duration>=80&&duration<=420&&Math.abs(dy)>=60&&Math.abs(dy)>=Math.abs(dx)*1.5&&Math.abs(dy)/duration>=.45;
-  if(!qualifies){resetTouchBurst();return;}
-  const continues=direction===touchBurst.direction&&fastTouch.start-touchBurst.lastEnd<=360&&now-touchBurst.first<=1100;
-  touchBurst=continues?{...touchBurst,count:touchBurst.count+1,lastEnd:now}:{direction,count:1,first:now,lastEnd:now};
-  fastTouch=null;if(touchBurst.count>=3)extendTouchFast(now);
-},{passive:true,capture:true});
-addEventListener('touchcancel',()=>resetTouchBurst(),{passive:true,capture:true});
+// Native reading owns touch scrolling except while crossing an authored dissolve.
+let readingTouch=null;
+reader.addEventListener('touchstart',e=>{
+  if(e.touches.length!==1){readingTouch=null;dissolveIntent=null;return;}
+  const t=e.touches[0];readingTouch={x:t.clientX,y:t.clientY};
+},{passive:true});
+reader.addEventListener('touchmove',e=>{
+  if(!readingTouch||e.touches.length!==1||phase!=='reading'||reduce.matches)return;
+  const t=e.touches[0],dy=readingTouch.y-t.clientY,dx=t.clientX-readingTouch.x;
+  readingTouch={x:t.clientX,y:t.clientY};
+  if(Math.abs(dy)<1||Math.abs(dx)>Math.abs(dy))return;
+  dissolveInput(dy,{preventDefault(){if(e.cancelable)e.preventDefault();}});
+  if(dissolveIntent)dissolveIntent.touch=true;
+},{passive:false});
+reader.addEventListener('touchend',()=>{readingTouch=null;if(dissolveIntent?.touch)dissolveIntent.until=performance.now()+1100;},{passive:true});
+reader.addEventListener('touchcancel',()=>{readingTouch=null;dissolveIntent=null;},{passive:true});
 // Also catch a pending native scroll frame that reaches the edge between wheel events.
 addEventListener('scroll',()=>{
   const y=scrollY,previousY=readingLastY,movingUp=y<previousY;readingLastY=y;
+  if(dissolveIntent?.touch&&performance.now()<=dissolveIntent.until)dissolveIntent.until=performance.now()+250;
   if(phase==='reading'&&!pageFade&&!reduce.matches&&dissolveIntent&&performance.now()<=dissolveIntent.until){
     const target=dissolveIntent.direction>0?1:0,ordered=target?dissolves:[...dissolves].reverse();
     // Coalesced native scroll events may omit the position at which the wheel began.
     const from=target?Math.min(previousY,dissolveIntent.origin):Math.max(previousY,dissolveIntent.origin);
     for(const pair of ordered){
-      if(pair.unavailable||pair.value===target)continue;
+      if(pair.unavailable||pair.waiting||pair.value===target)continue;
       const edge=dissolveAnchor(pair);
       if(target?from<=edge&&y>=edge:from>=edge&&y<=edge){beginPageFade(pair,target);return;}
     }
@@ -379,7 +401,7 @@ addEventListener('scroll',()=>{
   if(phase!=='reading'||reduce.matches||!readingReturnArmed||!movingUp||performance.now()>readingWheelUntil)return;
   if(root.getBoundingClientRect().top>=-.5)beginHomeReturn();
 },{passive:true});
-let touch=null;stage.addEventListener('touchstart',e=>{if(e.touches.length===1)touch={y:e.touches[0].clientY,fired:false};},{passive:true});stage.addEventListener('touchmove',e=>{if(!touch||e.touches.length!==1||phase==='reading'||reduce.matches)return;const dy=touch.y-e.touches[0].clientY;if(phase==='exitReady'&&dy<0){unlockStage();nativeExit=true;touch.y=e.touches[0].clientY;return;}if(Math.abs(dy)>2){e.preventDefault();touch.y=e.touches[0].clientY;input(Math.sign(dy),!touch.fired,Math.abs(dy));touch.fired=true;}},{passive:false});stage.addEventListener('touchend',()=>touch=null);
+let touch=null;stage.addEventListener('touchstart',e=>{if(e.touches.length===1)touch={y:e.touches[0].clientY,fired:false};},{passive:true});stage.addEventListener('touchmove',e=>{if(!touch||e.touches.length!==1||phase==='reading'||reduce.matches||entryPending)return;const dy=touch.y-e.touches[0].clientY;if(phase==='exitReady'&&dy<0){unlockStage();nativeExit=true;touch.y=e.touches[0].clientY;return;}if(Math.abs(dy)>2){e.preventDefault();touch.y=e.touches[0].clientY;input(Math.sign(dy),!touch.fired,Math.abs(dy));touch.fired=true;}},{passive:false});stage.addEventListener('touchend',()=>touch=null);
 addEventListener('keydown',e=>{
   if(e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey||e.target.closest?.('input,textarea,select,[contenteditable="true"]'))return;
   if(e.key==='Escape'&&readingApproach){e.preventDefault();stopReadingApproach();readingReturnArmed=false;return;}
@@ -409,11 +431,11 @@ addEventListener('click',e=>{
   if(pageFade&&navigates)clearPageFade();
   if(stageLocked&&!e.defaultPrevented&&e.button===0&&!e.ctrlKey&&!e.metaKey&&link&&(!link.target||link.target==='_self'))toReading(false);
 });
-addEventListener('resize',size);reduce.addEventListener('change',()=>{if(reduce.matches){stopMiddleScroll();resetTouchBurst();toReading(false);for(const pair of dissolves)setPageDissolve(pair,1);}});
+addEventListener('resize',size);reduce.addEventListener('change',()=>{if(reduce.matches){stopMiddleScroll();readingTouch=null;toReading(false);for(const pair of dissolves)setPageDissolve(pair,1);}});
 function syncFadeAnchor(){
   dissolveIntent=null;const number=Number(location.hash.replace('#ppt-page-','')),page=document.getElementById('ppt-page-'+number);if(!page)return;
   if(phase!=='reading')toReading(false);
-  if(number===6)homePage.style.transform='';
+  if(number===6)homePage.style.transform='';painted.delete(homePage);
   // A named frame selects its state directly; native smooth anchor travel must not reset it en route.
   const pair=dissolves.find(pair=>pair.source===page||pair.page===page);
   jump(number===6?base():pair?dissolveAnchor(pair):scrollY+page.getBoundingClientRect().top);readingLastY=scrollY;
@@ -468,6 +490,9 @@ window.swarovskiReadingResume?.registerGallery({snapshot:snapshotGallery});
 restoreGallery(reloadGallery);
 stage.addEventListener('touchmove',e=>{if(e.touches.length===1)resumeReload();},{passive:true,capture:true});
 addEventListener('keydown',e=>{if(!e.ctrlKey&&!e.metaKey&&!e.altKey&&['ArrowDown','ArrowUp','PageDown','PageUp',' '].includes(e.key)&&(stageLocked||stage.contains(document.activeElement)))resumeReload();},{capture:true});
-const pages=[...reader.querySelectorAll('.sg-page')];const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){let i=pages.indexOf(e.target);pages.slice(Math.max(0,i-1),i+4).forEach(p=>p.querySelector('img').loading='eager');}}),{rootMargin:'900px'});pages.forEach(p=>{observer.observe(p);const img=p.querySelector('img');img.addEventListener('error',()=>p.querySelector('a').hidden=false);});
+const galleryObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){loadGallery();galleryObserver.disconnect();}},{rootMargin:'600px'});galleryObserver.observe(root);
+const pages=[...reader.querySelectorAll('.sg-page')];
+const observer=new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting||phase!=='reading')continue;const i=pages.indexOf(e.target);pages.slice(Math.max(0,i-1),i+3).forEach(p=>{p.querySelectorAll('img').forEach(img=>img.loading='eager');const pair=dissolves.find(d=>d.source===p||d.page===p);if(pair){pair.image.loading='eager';if(pair.step)pair.step.querySelector('img').loading='eager';}});}},{rootMargin:'450px'});
+pages.forEach(p=>{observer.observe(p);const img=p.querySelector('img');img.addEventListener('error',()=>p.querySelector('a').hidden=false);});
 })();
 

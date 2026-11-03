@@ -3,8 +3,8 @@ html[data-project="swarovski"].sg-scroll-locked,html[data-project="swarovski"].s
 .sg-scroll-locked .sg-stage{touch-action:none}
 .sg-intro{display:none}.sg-ready:not(.sg-reading) .sg-intro{display:block;height:var(--sg-h);position:relative}
 .sg-stage{position:relative;height:var(--sg-h);overflow:hidden;background:#ececee;touch-action:pan-y pinch-zoom;isolation:isolate}.sg-stage:focus-visible{outline:3px solid #111;outline-offset:-3px}
-.sg-canvas{position:absolute;inset:0;pointer-events:none}.sg-card{position:absolute;left:50%;top:50%;height:auto;max-width:none;will-change:transform,opacity;pointer-events:none}.sg-title{display:none}
-.sg-window{position:absolute;left:0;top:0;width:1440px;height:810px;overflow:hidden;background:#fff;transform-origin:0 0;z-index:140;opacity:0;pointer-events:none}.sg-window .sg-reader{width:1440px;will-change:transform}
+.sg-canvas{position:absolute;inset:0;pointer-events:none}.sg-card{position:absolute;left:50%;top:50%;height:auto;width:550px;max-width:none;pointer-events:none}.sg-title{display:none}
+.sg-window{position:absolute;left:0;top:0;width:1440px;height:810px;overflow:hidden;background:#fff;transform-origin:0 0;z-index:140;opacity:0;pointer-events:none}.sg-window .sg-reader{width:1440px}
 .sg-page{position:relative;margin:0;padding:0;width:100%;line-height:0;background:#fff}.sg-page>img{display:block;width:100%;height:auto;aspect-ratio:16/9}.sg-retry{position:absolute;inset:0;align-items:center;justify-content:center;font:24px/1.5 Arial;background:#eee}.sg-retry:not([hidden]){display:flex}
 .sg-reader{margin:0;position:relative}.sg-home-layer{z-index:0}.sg-reading .sg-home-layer{position:sticky;top:0;transform:none}.sg-drawer{position:relative;z-index:1}.sg-reading .sg-intro{display:none}
 .sg-dissolve-ready{position:relative}
@@ -14,3 +14,6 @@ html[data-project="swarovski"].sg-scroll-locked,html[data-project="swarovski"].s
 .sg-dissolve-step img{display:block;width:100%;height:auto;aspect-ratio:16/9}
 .sg-dissolve-locked .sg-dissolve-pair{touch-action:none}
 @media(prefers-reduced-motion:reduce){.sg-intro{display:none!important}}
+
+.sg[data-phase="entry"] .sg-card,.sg[data-phase="travel"] .sg-card,.sg[data-phase="retract"] .sg-card{will-change:transform,opacity}
+.sg[data-phase="preview"] .sg-window .sg-reader,.sg[data-phase="zoom"] .sg-window .sg-reader{will-change:transform}

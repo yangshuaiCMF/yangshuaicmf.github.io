@@ -43,6 +43,7 @@ a:focus-visible { outline:calc(2px * var(--project-ui-inverse,1)) solid var(--in
 .opening-enhanced .opening-heading { position:absolute; inset:0 0 auto; z-index:2; pointer-events:none; }
 .opening-enhanced .hero-media { position:absolute; top:0; left:0; transform:translate3d(0,calc(var(--opening-visual-offset,0px) + var(--opening-visual-height,900px) * 1.03),0) scale(.38); }
 .opening.is-active .hero-media,.opening.is-active .opening-heading { will-change:transform,opacity; }
+.opening-enhanced .hero-media.is-waiting { opacity:0; }
 /* LOEWE second page, converted once from vw to this 1440px artboard. */
 .project-overview { padding:var(--gap) var(--gutter); display:grid; grid-template-columns:1fr 1fr; column-gap:129.6px; align-items:start; background:var(--paper); scroll-margin-top:36px; }
 .overview-heading p { font-size:27.36px; line-height:1.3; margin-bottom:4px; }
