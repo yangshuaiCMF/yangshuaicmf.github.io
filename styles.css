@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg: #050505;
   --bg-soft: #0e0e0e;
   --panel: #151515;
@@ -221,6 +221,25 @@ img {
 
 .hero h1 > span {
   display: block;
+}
+
+/* Keep the approved desktop headline shapes on every device. */
+.hero h1 .hero-fixed-glyph {
+  position: relative;
+  margin-right: -0.02em;
+  line-height: 0;
+}
+.hero-fixed-glyph svg {
+  display: block;
+  overflow: visible;
+  fill: currentColor;
+}
+.hero-glyph-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
 .hero h1 > span:nth-child(n + 2) {
@@ -841,7 +860,8 @@ img {
 
 
 
-.hero h1.is-split .hero-char {
+.hero h1.is-split .hero-char,
+.hero .hero-eyebrow-line .hero-char {
   display: inline-block;
   opacity: 0;
   transform: translateY(0.38em) scale(0.96);
@@ -872,7 +892,8 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .hero-sequence,
   .hero-sequence img,
-  .hero h1.is-split .hero-char {
+  .hero h1.is-split .hero-char,
+.hero .hero-eyebrow-line .hero-char {
     animation: none;
     opacity: 1;
     transform: none;
@@ -965,12 +986,32 @@ img {
 .hero h1.is-split > span:nth-child(3) { animation-name: heroLineCutRight; animation-delay: 2.58s; }
 .hero h1.is-split > span:nth-child(4) { animation-name: heroLineCutVertical; animation-delay: 2.70s; }
 
-.hero h1.is-split .hero-char {
+.hero h1.is-split .hero-char,
+.hero .hero-eyebrow-line .hero-char {
   opacity: 0;
   transform: translateY(0.44em) scale(0.94);
   filter: blur(14px);
   animation: heroCharacterReveal 0.58s cubic-bezier(0.18, 0.86, 0.24, 1) forwards;
   animation-delay: calc(2.42s + var(--char-delay, 0ms));
+}
+
+.hero .hero-eyebrow-line {
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  animation: heroLineCutLeft 0.72s cubic-bezier(0.16, 0.84, 0.22, 1) 2.34s forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .hero-eyebrow-line,
+  .hero .hero-eyebrow-line .hero-char {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+  }
 }
 
 @keyframes refinedSequenceStage {
@@ -1115,8 +1156,10 @@ img {
 .hero:not(.is-playing) .hero-column-stage,
 .hero:not(.is-playing) .hero-column-stage::after,
 .hero:not(.is-playing) .hero-column-stage img,
+.hero:not(.is-playing) .hero-eyebrow-line,
 .hero:not(.is-playing) h1.is-split > span,
-.hero:not(.is-playing) h1.is-split .hero-char {
+.hero:not(.is-playing) h1.is-split .hero-char,
+.hero:not(.is-playing) .hero-eyebrow-line .hero-char {
   animation: none;
 }
 
@@ -1128,12 +1171,14 @@ img {
   opacity: 0;
 }
 
-.hero:not(.is-playing) h1.is-split > span {
+.hero:not(.is-playing) h1.is-split > span,
+.hero:not(.is-playing) .hero-eyebrow-line {
   clip-path: inset(0 0 0 0);
   transform: none;
 }
 
-.hero:not(.is-playing) h1.is-split .hero-char {
+.hero:not(.is-playing) h1.is-split .hero-char,
+.hero:not(.is-playing) .hero-eyebrow-line .hero-char {
   opacity: 1;
   transform: none;
   filter: none;
@@ -2202,6 +2247,41 @@ img {
   font-size: min(1.68vw, 25px);
 }
 
+/* Narrow Work returns to the single-column reference layout. */
+@media (max-width: 760px) {
+  .work-tile-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .work-tile-visual {
+    aspect-ratio: 1.18 / 1;
+  }
+
+  .work-tile p,
+  .work-series:first-of-type .work-tile p {
+    font-size: clamp(15px, 1.68vw, 25px);
+  }
+}
+
+/* Home navigation fades away after leaving the top of the page. */
+.nav[data-home-nav] {
+  --nav-fade-duration: 1.5s;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--nav-fade-duration) linear, visibility 0s;
+}
+
+.nav[data-home-nav].is-home-nav-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--nav-fade-duration) linear, visibility 0s var(--nav-fade-duration);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav[data-home-nav] { --nav-fade-duration: 0.15s; }
+}
+
 /* Global alignment refinement: clean top nav and full-width Hero grid. */
 .nav {
   top: clamp(20px, 2.2vw, 34px);
@@ -2312,7 +2392,8 @@ img {
 }
 
 .hero h1.is-split > span,
-.hero h1.is-split .hero-char {
+.hero h1.is-split .hero-char,
+.hero .hero-eyebrow-line .hero-char {
   text-align: left;
 }
 

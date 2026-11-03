@@ -8,6 +8,7 @@
   const black = card.querySelector('.ins-black');
   const white = card.querySelector('.ins-white');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const touchMode = matchMedia('(hover: none) and (pointer: coarse)');
   // Adapt the PPT's green-first / black-before-white rhythm for direct scrolling.
   const SETTLE = 450, GESTURE_GAP = 240;
   const MORPH = 1600, RISE_AT = 900, BLACK_RISE = 1900, WHITE_RISE = 2200;
@@ -20,7 +21,7 @@
   let lastY = scrollY, lastDown = -Infinity, frame = 0, elapsed = 0, holdTimer = 0;
   let targetY = 0, dockFrom = 0, dockAt = 0, dockDuration = 450, diagnosticAt = -Infinity;
   let width = 1396.8, height = width / (11800840 / 6284595), touchY = null, touchFresh = false;
-  const pinned = () => ['hold', 'playing', 'complete'].includes(phase);
+  const pinned = () => !touchMode.matches && ['hold', 'playing', 'complete'].includes(phase);
   const locked = () => phase === 'docking' || pinned();
   const setPhase = value => { phase = value; card.dataset.scrollStage = value; };
   function paint(ms) {
@@ -105,7 +106,14 @@
     scene.classList.add('is-ins-playing');
     frame = requestAnimationFrame(tick);
   }
+  function playVisibleTouchScene() {
+    if (!touchMode.matches || reduced.matches || hasPlayed || document.hidden) return;
+    const r = card.getBoundingClientRect();
+    const visible = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0));
+    if (visible >= Math.min(r.height, innerHeight) * .65 && r.top < innerHeight * .65) play();
+  }
   function handle(delta, event, fresh) {
+    if (touchMode.matches) { playVisibleTouchScene(); return; }
     if (reduced.matches) return;
     if (delta < 0) {
       lastDown = -Infinity;
@@ -140,6 +148,7 @@
     handle(delta, event, fresh);
   }, {passive: false});
   addEventListener('scroll', () => {
+    if (touchMode.matches) { playVisibleTouchScene(); lastY = scrollY; return; }
     // The docking rAF owns scroll position until deceleration has finished.
     if (phase === 'docking') return;
     if (pinned()) { pin(); return; }
@@ -186,6 +195,7 @@
       // Preserve a queued gesture while adapting an in-flight stop to the new viewport.
       const queued = pendingPlay; dock(); pendingPlay = queued;
     } else if (pinned()) pin();
+    playVisibleTouchScene();
   }
   function setup(resetPlayback = false) {
     if (resetPlayback) hasPlayed = false;
@@ -199,7 +209,11 @@
   addEventListener('load', measure, {once: true});
   addEventListener('pageshow', event => { if (event.persisted) setup(true); else measure(); });
   reduced.addEventListener('change', () => setup());
-  document.addEventListener('visibilitychange', () => { if (document.hidden && locked()) release(true); });
+  touchMode.addEventListener('change', () => setup());
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && (locked() || phase === 'playing')) release(true);
+    else if (!document.hidden) playVisibleTouchScene();
+  });
   setup(true);
 })();
 

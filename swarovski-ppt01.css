@@ -1,0 +1,14 @@
+/* Swarovski 01 is the authority for the first four presentation pages. */
+html[data-project="swarovski"] .hero-media img { display:block; width:100%; height:100%; object-fit:contain; }
+html[data-project="swarovski"] .hero-caption[hidden] { display:none; }
+html[data-project="swarovski"] .ppt-overview { margin:0; padding:100px 21.6px 107.0775px; background:#fff; }
+html[data-project="swarovski"] .ppt-overview img,
+html[data-project="swarovski"] .ppt-evolution img { display:block; width:100%; height:auto; }
+html[data-project="swarovski"] .ppt-evolution { padding:60px 21.6px; background:#ececee; }
+/* KV tail and image-internal whitespace are included in the 150px visible spacing. */
+html[data-project="swarovski"].opening-enhanced .opening-stage::after { content:""; position:absolute; bottom:0; left:0; right:0; height:36.54125px; background:#fff; opacity:var(--kv-tail-opacity,0); pointer-events:none; }
+/* Cancel the grid gutter only at this gray-to-white boundary. */
+html[data-project="swarovski"] .ppt-evolution + #design-language { margin-top:calc(-1 * var(--gap)); }
+
+html[data-project="swarovski"] .ppt-overview-body { margin-top:30px; }
+html[data-project="swarovski"]:not(.opening-enhanced) .ppt-overview { padding-top:136.54125px; }

@@ -23,8 +23,8 @@ html[data-lang="zh"] .next-actions a{letter-spacing: 0.05em;}
 .project-scroll-film{position: relative; height: calc(var(--project-unit) * 3600); background: rgb(0, 0, 0);}
 .project-scroll-film-sticky{position: sticky; top: 0px; width: 100%; height: calc(var(--project-unit) * 900); overflow: hidden; background: rgb(0, 0, 0);}
 .project-scroll-film-video{display: block; width: 100%; height: 100%; object-fit: cover; object-position: center center; background: rgb(0, 0, 0);}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.project-scroll-film{height: calc(var(--project-unit) * 900);}}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.project-scroll-film-sticky{position: relative;}}
+@media (prefers-reduced-motion: reduce){.project-scroll-film{height: calc(var(--project-unit) * 900);}}
+@media (prefers-reduced-motion: reduce){.project-scroll-film-sticky{position: relative;}}
 .project-scroll-film-video{filter: brightness(0.48) saturate(0.88);}
 .project-scroll-film-copy{position: absolute; z-index: 2; inset: 0px; display: grid; place-content: center; justify-items: center; padding: clamp(calc(var(--project-unit) * 28), 6vw, calc(var(--project-unit) * 96)); color: rgb(255, 255, 255); text-align: center; pointer-events: none;}
 .project-scroll-film-copy h2{max-width: calc(var(--project-unit) * 1120); margin: 0px; font-size: clamp(calc(var(--project-unit) * 48), 6.8vw, calc(var(--project-unit) * 108)); font-weight: 600; line-height: 0.98; letter-spacing: -0.045em; text-shadow: rgba(0, 0, 0, 0.38) 0px calc(var(--project-unit) * 4) calc(var(--project-unit) * 30);}
@@ -33,7 +33,7 @@ html[data-lang="zh"] .next-actions a{letter-spacing: 0.05em;}
 .project-scroll-film-copy h2{max-width: none; font-size: calc(var(--project-unit) * 64); line-height: 1; letter-spacing: -0.045em; white-space: nowrap;}
 .project-scroll-film{height: calc(var(--project-unit) * 4500);}
 .project-scroll-film-sticky{z-index: 1;}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.project-scroll-film{height: calc(var(--project-unit) * 900);}}
+@media (prefers-reduced-motion: reduce){.project-scroll-film{height: calc(var(--project-unit) * 900);}}
 .project-page-light{--camon-canvas: #f5f5f7; --camon-card: #ffffff; --camon-ink: #1d1d1f; --camon-secondary: #6e6e73; --camon-lavender: #a77bd4; --camon-mist-blue: #7f9bc8; --camon-sage: #729b72; --camon-card-radius: 0px;}
 .project-page-light .next-actions a{border-color: transparent; background: var(--camon-card); box-shadow: rgba(0, 0, 0, 0.05) 0px calc(var(--project-unit) * 8) calc(var(--project-unit) * 24);}
 .camon-float-card{position: absolute; width: clamp(calc(var(--project-unit) * 180), 23vw, calc(var(--project-unit) * 320)); height: clamp(calc(var(--project-unit) * 240), 34vw, calc(var(--project-unit) * 470)); object-fit: cover; box-shadow: rgba(0, 0, 0, 0.32) 0px calc(var(--project-unit) * 34) calc(var(--project-unit) * 70); transform: translate3d(0, calc(var(--float-y, 140) * 1%), 0) scale(var(--float-scale, 1)); opacity: var(--float-opacity, 0); will-change: transform, opacity;}
@@ -85,8 +85,8 @@ html[data-lang="zh"] .next-actions a{letter-spacing: 0.05em;}
 .hd-transfer-head{width: min(100vw, calc(var(--project-unit) * 1599.01)); max-width: 100%; margin: 0px auto clamp(calc(var(--project-unit) * 34), calc(var(--project-unit) * 45), calc(var(--project-unit) * 72)); padding: 0px clamp(calc(var(--project-unit) * 24), 4vw, calc(var(--project-unit) * 64)); box-sizing: border-box;}
 .hd-transfer-head p{margin: 0px 0px calc(var(--project-unit) * 14); color: rgba(255, 255, 255, 0.68); font-size: clamp(calc(var(--project-unit) * 13), 1vw, calc(var(--project-unit) * 17));}
 .hd-transfer-head h2{margin: 0px; font-size: clamp(calc(var(--project-unit) * 42), 5vw, calc(var(--project-unit) * 86)); line-height: 0.98; letter-spacing: -0.06em;}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.hd-evolution-layer{transition: none !important; animation: auto ease 0s 1 normal none running none !important;}}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored .camon-float-card{transition: none !important; animation: auto ease 0s 1 normal none running none !important;}}
+@media (prefers-reduced-motion: reduce){.hd-evolution-layer{transition: none !important; animation: auto ease 0s 1 normal none running none !important;}}
+@media (prefers-reduced-motion: reduce){.camon30-restored .camon-float-card{transition: none !important; animation: auto ease 0s 1 normal none running none !important;}}
 .camon30-restored .hd-transfer-story{padding:var(--project-page-space) 0; background: rgb(0, 0, 0);}
 .camon30-restored .hd-transfer-sequence{position: relative; min-height: calc(var(--project-unit) * 1692);}
 .camon30-restored .hd-transfer-sticky{position: sticky; top: 0px; min-height: calc(var(--project-unit) * 900); display: grid; align-content: center; width: min(100vw, calc(var(--project-unit) * 1599.01)); max-width: 100%; margin: 0px auto; padding: clamp(calc(var(--project-unit) * 20), 2.4vw, calc(var(--project-unit) * 34)) clamp(calc(var(--project-unit) * 24), 3.2vw, calc(var(--project-unit) * 52)) clamp(calc(var(--project-unit) * 24), 3vw, calc(var(--project-unit) * 40)); box-sizing: border-box;}
@@ -98,7 +98,7 @@ html[data-lang="zh"] .next-actions a{letter-spacing: 0.05em;}
 .camon30-restored .hd-transfer-visual.is-left{--offset-x: calc(var(--project-unit) * -34); opacity: var(--left-show, 0); transform: translate3d(calc((1 - var(--left-show, 0)) * calc(var(--project-unit) * -24)), calc((1 - var(--left-show, 0)) * calc(var(--project-unit) * 30)), 0) scale(calc(0.988 + var(--left-show, 0) * 0.012));}
 .camon30-restored .hd-transfer-visual.is-right{--offset-x: calc(var(--project-unit) * 34); opacity: var(--right-show, 0); transform: translate3d(calc((1 - var(--right-show, 0)) * calc(var(--project-unit) * 24)), calc((1 - var(--right-show, 0)) * calc(var(--project-unit) * 30)), 0) scale(calc(0.988 + var(--right-show, 0) * 0.012));}
 .camon30-restored .hd-transfer-visual img{display: block; width: 100%; height: min(calc(var(--project-unit) * 486), calc(var(--project-unit) * 620)); object-fit: contain; object-position: center center; background: rgb(0, 0, 0);}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored .hd-transfer-visual{opacity: 1 !important; transform: none !important; transition: none !important; will-change: auto;}}
+@media (prefers-reduced-motion: reduce){.camon30-restored .hd-transfer-visual{opacity: 1 !important; transform: none !important; transition: none !important; will-change: auto;}}
 .camon-home-fab{position: fixed; left: clamp(calc(var(--project-unit) * 18), 2.2vw, calc(var(--project-unit) * 30)); bottom: clamp(calc(var(--project-unit) * 18), 2.4vw, calc(var(--project-unit) * 30)); z-index: 40; display: inline-flex; align-items: center; justify-content: center; min-width: calc(var(--project-unit) * 72); min-height: calc(var(--project-unit) * 44); padding: 0px calc(var(--project-unit) * 18); border-radius: calc(var(--project-unit) * 999); border: calc(var(--project-unit) * 1) solid rgba(255, 255, 255, 0.16); background: rgba(0, 0, 0, 0.7); color: rgb(255, 255, 255); font-size: calc(var(--project-unit) * 13); letter-spacing: 0.04em; backdrop-filter: blur(calc(var(--project-unit) * 14)); box-shadow: rgba(0, 0, 0, 0.22) 0px calc(var(--project-unit) * 14) calc(var(--project-unit) * 32); transition: transform 220ms, opacity 220ms, background-color 220ms;}
 .camon-home-fab:hover{transform: translateY(calc(var(--project-unit) * -2)); opacity: 0.92;}
 .camon-next-chapter{background: rgb(10, 10, 10); color: rgb(255, 255, 255); padding:var(--project-page-space) calc(var(--project-unit) * 56);}
@@ -209,22 +209,34 @@ html[data-lang="zh"] .next-actions a{letter-spacing: 0.05em;}
 .camon30-restored .camon-next-chapter .next-actions a{min-height: calc(var(--project-unit) * 44); padding-inline: calc(var(--project-unit) * 18); transition: color 180ms, background-color 180ms, border-color 180ms, opacity 180ms;}
 .camon30-restored .camon-next-chapter .next-actions a:nth-child(2){border-color: rgb(255, 255, 255); background: rgb(255, 255, 255); color: rgb(10, 10, 10);}
 .camon30-restored .camon-next-chapter .next-actions a:nth-child(2):hover{border-color: rgba(255, 255, 255, 0.82); background: rgba(255, 255, 255, 0.82); color: rgb(10, 10, 10);}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){html:has(body.camon30-restored){scroll-behavior: auto;}}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored #page-06.hd-rise-sequence{height: calc(var(--project-unit) * 900) !important; min-height: calc(var(--project-unit) * 900) !important;}}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored .hd-tone-scroll{height: calc(var(--project-unit) * 900) !important; min-height: calc(var(--project-unit) * 900) !important;}}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored .hd-evolution{height: calc(var(--project-unit) * 900) !important; min-height: calc(var(--project-unit) * 900) !important;}}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored .hd-transfer-sequence{height: calc(var(--project-unit) * 900) !important; min-height: calc(var(--project-unit) * 900) !important;}}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored .camon-home-fab{transition: none !important;}}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored .camon-next-chapter .next-actions a{transition: none !important;}}
-@media (prefers-reduced-motion: reduce) and (min-width: 821px), (prefers-reduced-motion: reduce) and (any-hover: hover) and (any-pointer: fine), (max-aspect-ratio: 1/1){.camon30-restored #page-06.hd-rise-sequence{aspect-ratio: 16 / 9; height: auto !important; min-height: 0px !important;}}
+@media (prefers-reduced-motion: reduce){html:has(body.camon30-restored){scroll-behavior: auto;}}
+@media (prefers-reduced-motion: reduce){.camon30-restored #page-06.hd-rise-sequence{height: calc(var(--project-unit) * 900) !important; min-height: calc(var(--project-unit) * 900) !important;}}
+@media (prefers-reduced-motion: reduce){.camon30-restored .hd-tone-scroll{height: calc(var(--project-unit) * 900) !important; min-height: calc(var(--project-unit) * 900) !important;}}
+@media (prefers-reduced-motion: reduce){.camon30-restored .hd-evolution{height: calc(var(--project-unit) * 900) !important; min-height: calc(var(--project-unit) * 900) !important;}}
+@media (prefers-reduced-motion: reduce){.camon30-restored .hd-transfer-sequence{height: calc(var(--project-unit) * 900) !important; min-height: calc(var(--project-unit) * 900) !important;}}
+@media (prefers-reduced-motion: reduce){.camon30-restored .camon-home-fab{transition: none !important;}}
+@media (prefers-reduced-motion: reduce){.camon30-restored .camon-next-chapter .next-actions a{transition: none !important;}}
+@media (prefers-reduced-motion: reduce) and (min-width: 821px), (prefers-reduced-motion: reduce) and (any-hover: hover) and (any-pointer: fine){.camon30-restored #page-06.hd-rise-sequence{aspect-ratio: 16 / 9; height: auto !important; min-height: 0px !important;}}
 .camon-home-fab,.camon30-restored .camon-next-chapter .next-actions a{min-height:44px;min-width:44px}.camon-home-fab{font-size:13px}.camon30-restored .camon-next-chapter .next-actions a{font-size:max(12px,calc(var(--project-unit) * 15))}
 
-/* Normal pages own both margins; compact viewing removes scroll-only overlap. */
+/* Normal pages own both margins; reduced motion removes scroll-only overlap. */
 .camon30-restored .camon-next-chapter{padding-block:var(--project-page-space)}
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1){.camon30-restored .hd-transfer-sequence + .hd-transfer-sequence{margin-top:0}.camon30-restored .hd-transfer-sticky{position:relative;top:0}}
+/* Narrow pages stay connected in normal flow; no scroll-only tracks or pinned panels. */
+@media (max-width: 980px), (max-aspect-ratio: 1/1) {
+  .camon30-restored .hd-tone-scroll,
+  .camon30-restored .hd-evolution,
+  .camon30-restored .project-scroll-film {height:var(--project-board-height);min-height:0}
+  .camon30-restored .hd-tone-sticky,
+  .camon30-restored .hd-evolution-sticky,
+  .camon30-restored .project-scroll-film-sticky {position:relative;top:auto;height:var(--project-board-height);min-height:0}
+  .camon30-restored .hd-transfer-sequence {height:auto;min-height:0}
+  .camon30-restored .hd-transfer-sequence + .hd-transfer-sequence {margin-top:0}
+  .camon30-restored .hd-transfer-sticky {position:relative;top:auto;transform:none;transition:none}
+}
+@media (prefers-reduced-motion: reduce){.camon30-restored .hd-transfer-sequence + .hd-transfer-sequence{margin-top:0}.camon30-restored .hd-transfer-sticky{position:relative;top:0}}
 
-/* Compact reading exposes every animated source, including selectable text layers. */
-@media (prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1) {
+/* Reduced motion exposes every animated source, including selectable text layers. */
+@media (prefers-reduced-motion: reduce) {
   .camon30-restored .hd-tone-scroll,.camon30-restored .hd-evolution {height:auto !important;min-height:0 !important}
   .camon30-restored .hd-tone-sticky {position:relative;height:auto;display:block;padding:var(--project-page-space) 5.2vw;overflow:visible}
   .camon30-restored .hd-tone-copy {position:relative;inset:auto}

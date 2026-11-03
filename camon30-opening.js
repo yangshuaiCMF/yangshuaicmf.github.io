@@ -5,7 +5,8 @@
   const stage = sequence.querySelector('.camon-opening-stage');
   const heading = sequence.querySelector('.camon-opening-heading');
   const picture = sequence.querySelector('.camon-opening-image');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1)');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const flow = matchMedia('(max-width: 980px), (max-aspect-ratio: 1/1)');
   let frame = 0, lastTime = 0, progress = 0, target = 0;
   let height = innerHeight, start = 0, end = 0;
   const clamp = value => Math.max(0, Math.min(1, value));
@@ -19,9 +20,9 @@
     const expansion = smooth((p - .44) / .56);
     const scale = p < .44 ? mix(.38, .65, approach) : mix(.65, 1, expansion);
     const y = p < .44 ? mix(1.03, .48, approach) : mix(.48, 0, expansion);
-    picture.style.transform = `translate3d(0, ${y * height}px, 0) scale(${scale})`;
-    heading.style.transform = `translate3d(0, ${-height * .63 * smooth(p / .94)}px, 0)`;
-    heading.style.opacity = String(1 - smooth((p - .22) / .55));
+    picture.style.transform = `translate3d(0, ${y * height * (flow.matches ? .18 : 1)}px, 0) scale(${scale})`;
+    heading.style.transform = flow.matches ? 'none' : `translate3d(0, ${-height * .63 * smooth(p / .94)}px, 0)`;
+    heading.style.opacity = flow.matches ? '1' : String(1 - smooth((p - .22) / .55));
   }
   function tick(time) {
     frame = 0;
@@ -36,7 +37,11 @@
   function scroll() {
     document.body.classList.toggle('camon-at-opening', scrollY < end - innerHeight * .5);
     if (reduced.matches) return;
-    target = clamp((scrollY - start) / (height * 1.8));
+    if (flow.matches) {
+      const center = end - height / 2 - scrollY;
+      const travel = Math.max(60, Math.min(innerHeight * .32, height * .65, (innerHeight - height) / 2));
+      target = clamp((innerHeight / 2 - center) / travel);
+    } else target = clamp((scrollY - start) / (height * 1.8));
     const inRange = scrollY >= start - height && scrollY < end;
     sequence.classList.toggle('is-active', inRange);
     if (!inRange || target === 0) {
@@ -44,7 +49,8 @@
     } else if (!frame) frame = requestAnimationFrame(tick);
   }
   function measure() {
-    height = stage.clientHeight || innerWidth * 900 / 1440;
+    // Choreography follows the picture's artboard; the pinned stage may be taller.
+    height = picture.clientHeight || innerWidth * 900 / 1440;
     start = sequence.getBoundingClientRect().top + scrollY;
     end = start + sequence.offsetHeight;
     scroll();

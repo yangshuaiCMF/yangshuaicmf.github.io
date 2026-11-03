@@ -1,0 +1,19 @@
+/* Opening type has its own reading scale; project content keeps its artboard. */
+@media (max-width: 1440px) {
+  html[data-project] {
+    --opening-readable-size: calc(clamp(22px, calc(15.73px + 1.608vw), 38.88px) * var(--project-ui-inverse, 1));
+    --opening-readable-gap: calc(clamp(12px, 1.944444vw, 28px) * var(--project-ui-inverse, 1));
+  }
+  html[data-project="swarovski"] {
+    --opening-readable-size: calc(min(clamp(22px, calc(15.73px + 1.608vw), 38.88px), 5.7vw) * var(--project-ui-inverse, 1));
+  }
+  html[data-project] :is(.opening-heading, .camon-opening-heading) h1 {
+    font-size: var(--opening-readable-size);
+  }
+  html[data-project] .opening-heading .hero-caption {
+    top: calc(50% + var(--opening-readable-size) * 1.12 + var(--opening-readable-gap));
+  }
+  html[data-project] .opening-heading .hero-caption p {
+    font-size: calc(clamp(12px, 1.3vw, 18.72px) * var(--project-ui-inverse, 1));
+  }
+}

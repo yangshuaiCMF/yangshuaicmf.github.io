@@ -1,0 +1,70 @@
+/* Shared press feedback; content artboards keep their existing layout. */
+.work-tile .work-tile-visual {
+  transition: transform 140ms ease-out, filter 140ms ease-out, opacity 140ms ease-out;
+  transform-origin: center;
+}
+.work-tile.work-tile:is(:active, .is-pressed) .work-tile-visual {
+  transform: scale(.985);
+  filter: brightness(.8);
+}
+.work-tile:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+}
+html[data-project] :is(.site-header a, .camon-opening-nav a, .footer-back, .footer-next, .footer-contact a, .camon-home-fab) {
+  transition: opacity 100ms ease-out, background-color 100ms ease-out, scale 100ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+html[data-project] :is(.site-header a, .camon-opening-nav a, .footer-back, .footer-next, .footer-contact a, .camon-home-fab):not([aria-disabled="true"]):is(:active, .is-pressed) {
+  opacity: .55;
+  background-color: rgba(128,128,128,.18);
+  scale: .96;
+}
+html[data-project] .footer-next[aria-disabled="true"] {
+  cursor: default;
+  opacity: .45;
+}
+html[data-project] :is(.site-header a, .camon-opening-nav a, .footer-back, .footer-next, .footer-contact a, .camon-home-fab):focus-visible {
+  outline: calc(2px * var(--project-ui-inverse, 1)) solid currentColor;
+  outline-offset: calc(3px * var(--project-ui-inverse, 1));
+}
+@media (max-width: 980px) {
+  html[data-project] :is(.site-header, .camon-opening-nav) {
+    padding-inline: calc(16px * var(--project-ui-inverse, 1));
+  }
+  html[data-project] :is(.site-header a, .camon-opening-nav a, .footer-back, .footer-next) {
+    font-size: calc(14px * var(--project-ui-inverse, 1));
+    line-height: 1.25;
+    min-height: calc(44px * var(--project-ui-inverse, 1));
+    min-width: calc(48px * var(--project-ui-inverse, 1));
+  }
+  html[data-project] :is(.site-header, .camon-opening-nav) nav > a:last-child {
+    justify-content: flex-end;
+  }
+  html[data-project] .project-footer .footer-meta {
+    margin-inline: max(0px, calc(16px * var(--project-ui-inverse, 1) - var(--project-unit) * 21.6));
+  }
+  html[data-project] .project-footer .footer-contact {
+    font-size: calc(12px * var(--project-ui-inverse, 1));
+    line-height: 1.5;
+  }
+  html[data-project] .footer-contact a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 0;
+  }
+  html[data-project] .camon-home-fab {
+    font-size: 14px;
+    min-height: 44px;
+    min-width: 52px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-tile .work-tile-visual,
+  html[data-project] :is(.site-header a, .camon-opening-nav a, .footer-back, .footer-next, .footer-contact a, .camon-home-fab) {
+    transition: none;
+  }
+  .work-tile.work-tile:is(:active, .is-pressed) .work-tile-visual { transform: none; }
+  html[data-project] :is(.site-header a, .camon-opening-nav a, .footer-back, .footer-next, .footer-contact a, .camon-home-fab):not([aria-disabled="true"]):is(:active, .is-pressed) { scale: none; }
+}
