@@ -7,13 +7,13 @@
  <script>
  // Reserve the final opening geometry before the first paint, not after deferred downloads.
  if(innerWidth<=980&&matchMedia('(hover: none) and (pointer: coarse)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-  const root=document.documentElement,z=innerWidth/1440,viewport=innerHeight/z,heading=viewport*.55,stage=heading+810+36.54125;
+  const root=document.documentElement,z=innerWidth/1440,heading=innerHeight/z,stage=Math.max(900,heading);
   root.style.setProperty('--opening-heading-height',heading+'px');
   root.style.setProperty('--opening-stage-height',stage+'px');
-  root.style.setProperty('--opening-visual-height',stage+'px');
-  root.style.setProperty('--opening-visual-offset','0px');
-  root.style.setProperty('--opening-travel','0px');
-  root.classList.add('opening-enhanced','opening-mobile-flow');
+  root.style.setProperty('--opening-visual-height','900px');
+  root.style.setProperty('--opening-visual-offset',Math.max(0,stage-900)+'px');
+  root.style.setProperty('--opening-travel',Math.min(stage*1.2,1620)+'px');
+  root.classList.add('opening-enhanced');
  }
  </script>
 <link rel="preload" as="image" media="(max-width: 980px) and (hover: none) and (pointer: coarse)" href="./assets/work/swarovski/gallery-20261101-2104/thumb-22.webp" imagesrcset="./assets/work/swarovski/gallery-20261101-2104/thumb-22-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-22-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-22.webp 900w" imagesizes="33vw">

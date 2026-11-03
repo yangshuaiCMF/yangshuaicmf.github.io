@@ -17,3 +17,9 @@ html[data-project="swarovski"].sg-scroll-locked,html[data-project="swarovski"].s
 
 .sg[data-phase="entry"] .sg-card,.sg[data-phase="travel"] .sg-card,.sg[data-phase="retract"] .sg-card{will-change:transform,opacity}
 .sg[data-phase="preview"] .sg-window .sg-reader,.sg[data-phase="zoom"] .sg-window .sg-reader{will-change:transform}
+
+/* Only visible while the first mobile entry owns scrolling and waits for real images. */
+.sg-loading-status{display:none;position:absolute;inset:0;z-index:150;align-content:center;justify-items:center;gap:calc(12px * var(--project-ui-inverse,1));background:#ececee;color:#555;font:calc(14px * var(--project-ui-inverse,1))/1.5 Arial,sans-serif;text-align:center}
+.sg[data-entry-held][data-loading] .sg-loading-status{display:grid}
+.sg-loading-status button{font:inherit;min-height:calc(44px * var(--project-ui-inverse,1));color:#111;background:#fff;border:1px solid #aaa;border-radius:calc(4px * var(--project-ui-inverse,1));padding:calc(8px * var(--project-ui-inverse,1)) calc(16px * var(--project-ui-inverse,1));cursor:pointer}
+.sg-loading-status button[hidden]{display:none}

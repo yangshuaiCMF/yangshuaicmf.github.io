@@ -42,7 +42,6 @@ a:focus-visible { outline:calc(2px * var(--project-ui-inverse,1)) solid var(--in
 .opening-enhanced .opening-stage { position:sticky; top:0; height:var(--opening-stage-height,900px); overflow:clip; isolation:isolate; }
 .opening-enhanced .opening-heading { position:absolute; inset:0 0 auto; z-index:2; pointer-events:none; }
 .opening-enhanced .hero-media { position:absolute; top:0; left:0; transform:translate3d(0,calc(var(--opening-visual-offset,0px) + var(--opening-visual-height,900px) * 1.03),0) scale(.38); }
-.opening-mobile-flow .opening-stage { position:relative; }
 .opening.is-active .hero-media,.opening.is-active .opening-heading { will-change:transform,opacity; }
 .opening-enhanced .hero-media.is-waiting { opacity:0; }
 /* LOEWE second page, converted once from vw to this 1440px artboard. */
