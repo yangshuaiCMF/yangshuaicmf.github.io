@@ -61,50 +61,61 @@ a:focus-visible { outline:calc(2px * var(--project-ui-inverse,1)) solid var(--in
 .copy { font-size:var(--body); line-height:1.45; min-width:0; overflow-wrap:break-word; }
 .copy h3 { margin-bottom:20px; }
 .copy p+p { margin-top:24px; }
-.brand-pair,.development-pair,.detail-pair { display:grid; grid-template-columns:1fr 1fr; gap:36px; }
-.brand-study > h3,.development-pair h3,.refinement-grid h3,.final-details > h3,.campaign-layout h3 { margin-bottom:24px; }
-.brand-study .copy { margin-top:28px; padding:0 24px; }
-.editorial-statement { display:grid; grid-template-columns:5fr 7fr; gap:48px; padding:0 calc(var(--gutter) - var(--edge)); margin-top:60px; }
-.editorial-statement > h3,.workshop-intro > h3 { font-size:var(--headline); line-height:1.25; letter-spacing:-.02em; }
-.language-layout { display:grid; grid-template-columns:4fr 8fr; gap:60px; align-items:start; }
-.language-notes { display:grid; gap:48px; padding:36px 24px 0 calc(var(--gutter) - var(--edge)); }
-.language-media { aspect-ratio:5/4; }
-.workshop-intro { display:grid; grid-template-columns:4fr 8fr; gap:60px; padding:0 calc(var(--gutter) - var(--edge)); margin-bottom:48px; }
-/* One co-creation board. Large directions and smaller studies share a baseline, without card shells or controls. */
-.workshop-board { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:36px; padding:36px; background:var(--paper); }
-.workshop-group > h3 { margin-bottom:28px; }
-.workshop-concept { margin:0; min-width:0; scroll-margin-top:36px; }
-.concept-master { aspect-ratio:4/3; }
-.workshop-concept figcaption { font-size:18px; line-height:1.4; margin-top:12px; }
-.concept-variants { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:32px; }
-.concept-variants-wide { grid-template-columns:1fr; }
-.concept-study { height:176px; }
-.development-media { aspect-ratio:4/3; }
-.comparison { margin-top:60px; padding:0 calc(var(--gutter) - var(--edge)); }
-.comparison > h3 { font-size:var(--headline); margin-bottom:28px; }
-.comparison table { width:100%; table-layout:fixed; border-collapse:collapse; font-size:var(--body); line-height:1.45; }
-.comparison-label { width:24%; }
-.comparison th,.comparison td { text-align:left; vertical-align:top; padding:24px 36px 24px 0; border-bottom:1px solid #b8b8ba; font-weight:400; overflow-wrap:break-word; }
-.comparison thead th { padding-top:0; }
-.comparison tbody tr:last-child > * { border-bottom:0; padding-bottom:0; }
-.focus-layout { display:grid; grid-template-columns:8fr 4fr; gap:60px; align-items:start; }
-.selected-media { aspect-ratio:4/3; }
-.focus-notes { display:grid; gap:48px; padding:36px 24px 0 0; }
-.criteria { margin-top:60px; padding:0 calc(var(--gutter) - var(--edge)); }
-.criteria > h3 { font-size:var(--headline); margin-bottom:36px; }
-.criteria-grid,.summary-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:60px; }
-.refinement-grid { display:grid; grid-template-columns:7fr 5fr; gap:60px; align-items:start; }
-.refinement-details { display:grid; gap:60px; }
-.refinement-grid .copy { margin-top:28px; }
-.final-details { margin-top:60px; }
-.kv-intent { margin-top:0; margin-bottom:48px; }
-.master-visual h3 { margin-top:28px; }
-.campaign-layout { display:grid; grid-template-columns:5fr 7fr; gap:60px; align-items:start; }
-.campaign-layout .copy { margin-top:28px; }
-.outdoor-application { padding-top:144px; scroll-margin-top:36px; }
-.summary-page .display-title { font-size:80px; line-height:1.05; }
-.summary-grid { padding:0 calc(var(--gutter) - var(--edge)); }
-.page :is(.brand-study,.language-notes,.workshop-group,.development-pair>section,.focus-notes,.refinement-main,.refinement-details,.digital-application,.outdoor-application) { min-width:0; }
+/* Swarovski 03 responsive development log.
+   The PPT owns the sequence, image crops and title. The supplied SDL reference owns the
+   responsive mechanism: three fluid columns, screen-stable gutters and live wrapping copy. */
+.cmf-development,.cmf-development + .case-kv { margin-top:calc(-1 * var(--gap)); }
+.cmf-development-title { display:block; width:71.965%; height:auto; margin-bottom:91.2px; }
+.cmf-development-grid {
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:calc(14px * var(--project-ui-inverse,1));
+ margin-left:9.34px;
+ min-width:0;
+}
+.cmf-development-media { min-width:0; overflow:hidden; }
+.cmf-development-media img { display:block; width:100%; height:auto; }
+.cmf-development-media--decision,.cmf-development-media--prototype { grid-column:span 2; }
+.cmf-development-media--meeting { grid-column:span 2; }
+.cmf-development-copy {
+ /* Base responsive scale retained; user-requested 50% copy size applies below.
+    Final screen sizes: 390→5.5px, 825→5.75px, 1146→6px, 1440→6.6665px. */
+ --cmf-copy-size:clamp(11px,calc(10.551724px + .114943vw),11.5px);
+ min-width:0;
+ align-self:start;
+ font-family:Arial,'Microsoft YaHei UI','Microsoft YaHei',sans-serif;
+ font-size:calc(var(--cmf-copy-size) * .5 * var(--project-ui-inverse,1));
+ line-height:1.26;
+ font-weight:400;
+ letter-spacing:0;
+ overflow-wrap:anywhere;
+ text-wrap:pretty;
+}
+@media(min-width:825px) {
+ .cmf-development-copy { --cmf-copy-size:clamp(11.5px,calc(10.214953px + .155763vw),12px); }
+}
+@media(min-width:1146px) {
+ .cmf-development-copy { --cmf-copy-size:clamp(12px,calc(6.804429px + .453401vw),13.333px); }
+}
+.cmf-development-copy h3 { font:inherit; margin:0; }
+.cmf-development-copy p { margin:0; }
+.cmf-development-copy .cmf-development-date { margin-bottom:calc(7px * var(--project-ui-inverse,1)); }
+.cmf-development-copy--meeting,.cmf-development-copy--prototype { grid-column:1; }
+.cmf-development-copy--prototype { grid-row:5; }
+.cmf-development-media--prototype { grid-column:2 / span 2; }
+#material-details { scroll-margin-top:36px; }
+.case-placeholder { display:grid; place-items:center; font-size:27px; line-height:1.25; }
+.case-kv { background:var(--paper); padding-bottom:0; }
+.case-kv[hidden] { display:none; }
+/* Match the development grid's second column start and right image edge.
+   Include its 9.34px inset and screen-stable 14px gutter in the column calculation. */
+.case-conclusion { margin-top:calc(-1 * var(--gap)); padding:17.28px var(--edge) 60px; background:var(--paper); scroll-margin-top:36px; }
+.case-conclusion-body { margin-left:calc((100% + 18.68px + 14px * var(--project-ui-inverse,1)) / 3); font-family:Arial,Helvetica,sans-serif; }
+.case-conclusion-copy { font-size:25.92px; line-height:1.23; letter-spacing:-.025em; font-weight:400; text-align:justify; text-align-last:left; overflow-wrap:break-word; }
+.case-conclusion-team { margin-top:64.8px; font-size:22.32px; line-height:1.04; }
+.case-conclusion-team-label { margin-bottom:23.04px; }
+.case-conclusion-team ul { list-style:none; padding:0; margin:0; }
+.case-conclusion-signature { margin-top:36px; text-align:right; font-size:22.32px; line-height:1.2; }
 .project-footer .footer-contact { font-size:13.536px; }
 @media(prefers-reduced-motion:reduce) {
  html { scroll-behavior:auto; }

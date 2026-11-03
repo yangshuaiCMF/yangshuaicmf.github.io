@@ -10,9 +10,10 @@ const clamp=v=>Math.max(0,Math.min(1,v)),mix=(a,b,t)=>a+(b-a)*t;
 const smooth=v=>{const t=clamp(v);return t*t*(3-2*t)};
 let frame=0,lastTime=0,progress=0,target=0,height=900,stageHeight=0,visualHeight=900,visualOffset=0,mediaHeight=0,travel=1620,start=0,end=0;
 function draw(p){
+ stage.style.setProperty('--kv-tail-opacity',smooth((p-.8)/.2));
  // One continuous rise: position and scale share a monotone curve with no restart.
  const rise=p*(2-p),scale=mix(.38,1,rise);
- const finalY=Math.max(0,visualHeight-mediaHeight-45);
+ const finalY=Math.max(0,visualHeight-mediaHeight-36.54125);
  const y=visualOffset+mix(visualHeight*1.03,finalY,rise);
  media.style.transform='translate3d(0,'+y+'px,0) scale('+scale+')';
  const headingY=-height*.63*smooth(p/.94);
@@ -43,5 +44,5 @@ function measure(){
 function setup(){cancelAnimationFrame(frame);frame=0;lastTime=0;document.documentElement.classList.toggle('opening-enhanced',!reduce.matches);if(reduce.matches){heading.style.transform='';heading.style.opacity='';caption.style.opacity='';media.style.transform='';opening.classList.remove('is-active');}measure();}
 addEventListener('scroll',scroll,{passive:true});addEventListener('resize',measure,{passive:true});reduce.addEventListener('change',setup);setup();
 // Resolve deep links after the opening stage has established its scroll height.
-addEventListener('pageshow',event=>{measure();if(event.persisted||!location.hash)return;requestAnimationFrame(()=>{let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}const target=document.getElementById(id);if(target)target.scrollIntoView({behavior:'instant',block:'start'});});});
+addEventListener('pageshow',event=>{measure();if(event.persisted||window.swarovskiReadingResume?.saved||!location.hash||/^#ppt-page-/.test(location.hash))return;requestAnimationFrame(()=>{let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}const target=document.getElementById(id);if(target)target.scrollIntoView({behavior:'instant',block:'start'});});});
 })();

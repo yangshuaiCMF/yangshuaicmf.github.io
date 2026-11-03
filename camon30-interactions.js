@@ -190,7 +190,15 @@ if (languageToggle && translatableItems.length) {
   });
 }
 
-const camonMotionMode = window.matchMedia("(prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1)");
+const camonMotionMode = window.matchMedia("(prefers-reduced-motion: reduce)");
+const camonFlowMode = window.matchMedia('(max-width: 980px), (max-aspect-ratio: 1/1)');
+// In narrow layouts the page stays in normal flow. Only its contents animate,
+// starting when the artboard center reaches the viewport center.
+function camonFlowProgress(section) {
+  const rect = section.getBoundingClientRect();
+  const travel = Math.max(60, Math.min(innerHeight * .32, rect.height * .65, (innerHeight - rect.height) / 2));
+  return Math.min(1, Math.max(0, (innerHeight / 2 - rect.top - rect.height / 2) / travel));
+}
 const scrollFilmSections = document.querySelectorAll("[data-scroll-film]");
 
 scrollFilmSections.forEach((section) => {
@@ -211,7 +219,7 @@ scrollFilmSections.forEach((section) => {
 
     const rect = section.getBoundingClientRect();
     const scrollRange = Math.max(1, section.offsetHeight - projectMotionHeight() * 2);
-    const progress = Math.min(1, Math.max(0, -rect.top / scrollRange));
+    const progress = camonFlowMode.matches ? camonFlowProgress(section) : Math.min(1, Math.max(0, -rect.top / scrollRange));
 
     if (nav) {
       const navBottom = nav.getBoundingClientRect().bottom;
@@ -294,7 +302,7 @@ strategyCarousels.forEach((carousel) => {
   };
 
   const moveCarousel = (direction) => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce), (max-aspect-ratio: 1/1)").matches;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     track.scrollBy({
       left: direction * getScrollStep(),
       behavior: reducedMotion ? "auto" : "smooth",
@@ -351,7 +359,7 @@ moodScrollSections.forEach((section) => {
     if (camonMotionMode.matches) { renderMoodProgress(0.58); return; }
     const rect = section.getBoundingClientRect();
     const scrollRange = Math.max(1, section.offsetHeight - projectMotionHeight());
-    const progress = Math.min(1, Math.max(0, -rect.top / scrollRange));
+    const progress = camonFlowMode.matches ? camonFlowProgress(section) : Math.min(1, Math.max(0, -rect.top / scrollRange));
     renderMoodProgress(progress);
   };
 
@@ -511,7 +519,10 @@ hdRiseSections.forEach((section) => {
     let progress;
     let panelProgress;
 
-    if (proportionalPc.matches) {
+    if (camonFlowMode.matches) {
+      progress = camonFlowProgress(section);
+      panelProgress = progress * progress * (3 - 2 * progress);
+    } else if (proportionalPc.matches) {
       const viewportHeight = window.innerHeight;
       const revealStart = viewportHeight * 0.92;
       const revealEnd = viewportHeight * 0.12;
@@ -554,7 +565,7 @@ hdEvolutionSections.forEach((section) => {
     }
     const rect = section.getBoundingClientRect();
     const range = Math.max(1, section.offsetHeight - projectMotionHeight());
-    const progress = Math.min(1, Math.max(0, -rect.top / range));
+    const progress = camonFlowMode.matches ? camonFlowProgress(section) : Math.min(1, Math.max(0, -rect.top / range));
     section.style.setProperty('--evo-roadmap', fade(progress, 0.16, 0.42).toFixed(3));
     section.style.setProperty('--evo-camon30', fade(progress, 0.58, 0.76).toFixed(3));
   };
@@ -594,7 +605,11 @@ hdTransferSequences.forEach((section) => {
     }
     const rect = section.getBoundingClientRect();
     const range = Math.max(1, section.offsetHeight - projectMotionHeight());
-    const progress = Math.min(1, Math.max(0, -rect.top / range));
+    // Tall viewports can reach the page end before the final panel reaches the top.
+    // Keep its reveal inside the reachable scroll range, without changing desktop timing.
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    const start = Math.min(rect.top + scrollY, Math.max(0, maxScroll - range));
+    const progress = camonFlowMode.matches ? camonFlowProgress(section) : Math.min(1, Math.max(0, (scrollY - start) / range));
     section.style.setProperty('--sequence-progress', fade(progress, 0.02, 0.20).toFixed(3));
     section.style.setProperty('--left-show', fade(progress, 0.01, 0.14).toFixed(3));
     section.style.setProperty('--right-show', fade(progress, 0.08, 0.22).toFixed(3));

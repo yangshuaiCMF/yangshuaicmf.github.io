@@ -11,19 +11,24 @@
  <link rel="stylesheet" href="./loewe-sling-top.css">
  <link rel="stylesheet" href="./project-footer.css">
  <link rel="stylesheet" href="./project-cursor.css">
+ <script src="./swarovski-reading-position.js" defer></script>
  <script src="./swarovski-opening.js" defer></script>
  <script src="./swarovski-text.js" defer></script>
   <script src="./loewe-sling-top.js" defer></script>
  <script src="./project-cursor.js" defer></script>
+<link rel="stylesheet" href="./interaction-feedback.css">
+<script src="./interaction-feedback.js" defer></script>
+<link rel="stylesheet" href="./project-opening-type.css">
+<link rel="stylesheet" href="./swarovski-ppt01.css">
+<link rel="stylesheet" href="./swarovski-gallery.css">
+<script src="./swarovski-gallery.js" defer></script>
 </head>
 <body>
 <!--
-THESIS: A CMF case study showing workshop breadth, design judgment and the final campaign.
-OWN-WORLD: Existing CAMON portfolio; 1440px artboard, Arial, white sheets, paper #ececee, gray media #d6d6d8.
-STORY: Brand intersection, design language, eight grouped workshop concepts, two developed directions, focus, CMF refinement, final design, key visual, campaign.
-FIRST VIEWPORT: Preserve CAMON40 independent centered title and opening KV motion; preserve LOEWE two-column overview.
-FORM: User-approved integrated workshop board with primary concepts and variants; all process content visible in document order, no drawer or image selector. Body XXXX and gray imagery are placeholders; direction groups are provisional.
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+CMF portfolio: workshop exploration, color decision, physical sample review,
+internal marketing KV and product highlights, then project credits.
+1440px artboard; preserve the existing opening, PPT gallery and scroll transitions.
+The development log follows the designer-supplied PPT; final KV and credits remain placeholders.
 -->
 <a class="skip-link" href="#introduction">Skip to project overview</a>
 <header class="site-header" id="top"><nav aria-label="Project navigation"><a href="./index.html#work">Back</a><a href="#contact" aria-label="Next: project footer">Next</a></nav></header>
@@ -31,105 +36,184 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <!-- 1. Opening: same independent viewport-centered title and KV trajectory as CAMON40. -->
 <section class="opening" id="opening" aria-labelledby="project-title">
  <div class="opening-stage">
-  <div class="opening-heading"><h1 id="project-title"><span>CAMON 40 Series x Swarovski</span><span>A Cross-Brand Vision</span></h1><div class="hero-caption"><p>XXXX<br>XXXX</p></div></div>
-  <figure class="media hero-media" data-slot="opening" role="img" aria-label="Opening visual — image placeholder"></figure>
+  <div class="opening-heading"><h1 id="project-title"><span>CAMON 40 SERIES</span><span>x Swarovski</span></h1><div class="hero-caption" hidden aria-hidden="true"><p></p></div></div>
+  <figure class="media hero-media"><img srcset="./assets/work/swarovski/ppt01-opening-960.webp 960w, ./assets/work/swarovski/ppt01-opening-1600.webp 1600w, ./assets/work/swarovski/ppt01-opening.webp 3840w" sizes="100vw" fetchpriority="high" src="./assets/work/swarovski/ppt01-opening.webp" width="3840" height="2160" alt="CAMON 40 x Swarovski 彩色珠宝礼盒主视觉"></figure>
  </div>
 </section>
 <!-- 2. LOEWE cross-brand overview: inherited two-column hierarchy and 166.5px right-column offset. -->
-<section class="project-overview" id="introduction" tabindex="-1" aria-labelledby="overview-title">
- <div class="overview-heading"><p>CAMON 40 Series x Swarovski</p><h2 id="overview-title">Project Overview</h2></div>
- <div class="overview-body"><h3>Project Background<br>Design Objective</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div>
-</section>
+<section class="ppt-overview" id="introduction" tabindex="-1" aria-label="CMF Design Strategy：项目背景"><img class="ppt-overview-heading" src="./assets/work/swarovski/ppt01-background-heading.png" width="3840" height="300" alt="CMF Design Strategy：强化CAMON时尚单品心智，优势市场拔高、新市场破局"><img class="ppt-overview-body" src="./assets/work/swarovski/ppt01-background-body.png" width="3840" height="790" alt="项目时间23_24；项目职责及CMF设计策略说明，完整文字见后文"><div class="sr-only">延续 CAMON 年度联名策略，借助合作品牌的知名度与用户认同，提升在东南亚新市场的关注度，触达手机消费圈层之外的时尚与生活方式人群，为品牌建立更鲜明的第一印象。
+CMF Design Strategy
+强化
+CAMON
+时尚单品
+心智
+,
+优势市场拔高、新市场破局
+项目时间
+ . 
+23_24
+我的职责
+CAMON 40 
+IP
+营销款设计负责
+海外洞察
+ . CMF
+设计
+ . 
+评审提案
+ . 
+设计优化
+ . 
+标样决策
+前期围绕东南亚市场开展 IP 偏好调研，对比施华洛世奇、宝可梦、哈利波特等合作方向。
+施华洛世奇在本轮调研中位居前列，其闪耀、时尚与轻奢的品牌特质，也更契合 CAMON 强化时尚单品心智的目标，因此成为最终主方向。
+设计上，以珠宝腕表为灵感，将镜头 DECO 转化为精致表盘，通过层叠金属轮廓、碎钻的视觉将联名的品牌吸引力转化为鲜明CMF
+设计</div></section>
 <!-- A single parent gap owns every visible gray separator. Individual white sheets own their internal 60px padding. -->
 <div class="page-stack">
-<section class="page brand-page" id="design-reasoning" tabindex="-1" aria-labelledby="design-reasoning-title">
-<h2 class="display-title" id="design-reasoning-title" data-title>Brand Intersection</h2>
+<section class="ppt-evolution" id="design-reasoning" tabindex="-1" aria-label="Design Evolution & Strategic Directions"><img srcset="./assets/work/swarovski/update-20261102-1545/evolution.web-1280.webp 1280w, ./assets/work/swarovski/update-20261102-1545/evolution.web-1920.webp 1920w, ./assets/work/swarovski/update-20261102-1545/evolution.web.webp 3720w" sizes="100vw" src="./assets/work/swarovski/update-20261102-1545/evolution.web.webp" width="3720" height="2624" alt="Design Evolution & Strategic Directions：轻奢晶饰美学、潮玩趣味时尚、人文自然影像、时尚视觉影像、自然艺术；五排品牌演进、方案说明及手机设计，完整按PPT排列。"><div class="sr-only">Design Evolution &amp; 
+Strategic Directions
+腕间珠光：珠宝腕表灵感的轻奢设计
+珠宝化DECO / 精致金属 / 柔润肌理
 
- <div class="brand-pair" data-enter>
-  <div class="brand-study"><h3>TECNO CAMON</h3><figure class="media landscape" data-slot="camon-identity" role="img" aria-label="Camon identity — image placeholder" ></figure><div class="copy"><h3>CAMON Identity</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
-  <div class="brand-study"><h3>Swarovski</h3><figure class="media landscape" data-slot="swarovski-identity" role="img" aria-label="Swarovski identity — image placeholder" ></figure><div class="copy"><h3>Swarovski Identity</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
+以施华洛世奇珠宝腕表为灵感，将镜头DECO转化为精致表盘，通过同心层叠的金属轮廓、放射状细腻纹理与香槟金饰边，塑造珠宝般的光泽与层次。背板以柔润皮纹衬托金属质感，结合侧边流畅的弧线拼接，让科技产品融入日常穿搭，成为表达个人品位的随身配饰。
+01
+01
+CAMON 40：SWAROVSKI
+轻奢晶饰美学设计(WEB4.0)
+CAMON 19：蒙德里安
+经典现代艺术（WEB1.0)
+CAMON 20 ：Mr Doodle潮流涂鸦当代艺术（WEB2.0)
+CAMON 30：LOEWE 
+时尚视觉构成（WEB3.0)
+活力潮玩IP：鲜明潮玩趣味时尚设计
+彩色玻纤编织 / 活力撞色 / 潮玩收藏
+
+以宝可梦的冒险精神与皮卡丘的标志性黄色为灵感，将鲜明色彩融入玻纤编织工艺，以细密交织的纹理赋予背板丰富的视觉层次。通过活力黄与银白色的碰撞、流畅的弧线分区，打造兼具趣味与精致感的潮流外观。搭配精灵球造型礼盒及系列配件，将日常使用延伸为探索与收藏的体验
+02
+02
+CAMON 40：宝可梦
+潮玩趣味时尚IP
+CAMON 19：蒙德里安
+经典现代艺术（WEB1.0)
+CAMON 20 ：Mr Doodle潮流涂鸦当代艺术（WEB2.0)
+CAMON 30：LOEWE 
+时尚视觉构成（WEB3.0)
+艺术家的后花园：香氛玻纤的感官美学
+艺术花园 / 编织玻纤 / 香氛体验
+
+以艺术家笔下的私享花园为灵感，将绿意、花影与绘画笔触融入玻纤编织肌理，让背板呈现画布般的细腻质感。搭配银色金属与石纹质感DECO，形成自然意趣与精致工艺的对照，再融入香氛玻纤的概念，从视觉、触觉延伸至嗅觉，将随身手机化为日常中的一座感官花园。
+03
+03
+CAMON 40：国家地理
+人文自然+专业影像TV
+CAMON 19：蒙德里安
+经典现代艺术（WEB1.0)
+CAMON 20 ：Mr Doodle潮流涂鸦当代艺术（WEB2.0)
+CAMON 30：LOEWE 
+时尚视觉构成（WEB3.0)
+艺术影像概念：慢门拖拍技法构成设计
+景深感 / 一体化设计 / 材质创新+视觉构成
+
+慢门拍摄，使用较长的曝光时间进行拍摄，可以获得更多的曝光时间，还能记录光点轨迹，使画面主体突出，表现强烈的动感，是影像拍摄里的独特拍摄技法
+04
+04
+CAMON 40：主题创作
+时尚视觉影像美学
+CAMON 19：蒙德里安
+经典现代艺术（WEB1.0)
+CAMON 20 ：Mr Doodle潮流涂鸦当代艺术（WEB2.0)
+CAMON 30：LOEWE 
+时尚视觉构成（WEB3.0)
+自然艺术时尚：自然印象的艺术表达
+自然光影 / 流动纹理 / 清透浅绿
+
+将自然中交叠、流动的绿意转化为背板上的抽象纹理。通过浅绿与柔白的晕染、疏密有致的留白，营造轻盈通透的视觉层次，并以圆润的镜头DECO呼应整体柔和轮廓，用自然松弛的纹理方式表达印象派的艺术形式
+05
+05
+CAMON 40：主题创作
+自然印象艺术
+CAMON 19：蒙德里安
+经典现代艺术（WEB1.0)
+CAMON 20 ：Mr Doodle潮流涂鸦当代艺术（WEB2.0)
+CAMON 30：LOEWE 
+时尚视觉构成（WEB3.0)</div></section>
+<section class="sg" id="design-language" tabindex="-1" aria-labelledby="design-language-title"><div class="sg-intro"><div class="sg-stage" tabindex="0" role="region" aria-label="联名设计九宫格，向下轻滚启动动画，Esc直接阅读"><div class="sg-canvas" aria-hidden="true"><img class="sg-card" data-index="0" src="./assets/work/swarovski/gallery-20261101-2104/slide-6.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="1" srcset="./assets/work/swarovski/update-20261102-1545/thumb-7-360.webp 360w, ./assets/work/swarovski/update-20261102-1545/thumb-7-600.webp 600w, ./assets/work/swarovski/update-20261102-1545/thumb-7.webp 900w" sizes="33vw" src="./assets/work/swarovski/update-20261102-1545/thumb-7.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="2" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-8-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-8-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-8.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-8.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="3" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-9-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-9-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-9.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-9.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="4" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-10-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-10-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-10.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-10.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="5" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-11-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-11-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-11.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-11.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="6" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-12-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-12-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-12.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-12.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="7" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-13-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-13-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-13.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-13.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="8" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-14-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-14-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-14.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-14.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="9" srcset="./assets/work/swarovski/update-20261102-1545/thumb-15-360.webp 360w, ./assets/work/swarovski/update-20261102-1545/thumb-15-600.webp 600w, ./assets/work/swarovski/update-20261102-1545/thumb-15.webp 900w" sizes="33vw" src="./assets/work/swarovski/update-20261102-1545/thumb-15.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="10" srcset="./assets/work/swarovski/update-20261102-1545/thumb-16-360.webp 360w, ./assets/work/swarovski/update-20261102-1545/thumb-16-600.webp 600w, ./assets/work/swarovski/update-20261102-1545/thumb-16.webp 900w" sizes="33vw" src="./assets/work/swarovski/update-20261102-1545/thumb-16.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="11" srcset="./assets/work/swarovski/update-20261102-v78-page17-bg/thumb-17-360.webp 360w, ./assets/work/swarovski/update-20261102-v78-page17-bg/thumb-17-600.webp 600w, ./assets/work/swarovski/update-20261102-v78-page17-bg/thumb-17.webp 900w" sizes="33vw" src="./assets/work/swarovski/update-20261102-v78-page17-bg/thumb-17.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="12" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-18-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-18-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-18.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-18.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="13" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-19-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-19-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-19.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-19.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="14" srcset="./assets/work/swarovski/update-20261102-v78-blank/thumb-20-360.webp 360w, ./assets/work/swarovski/update-20261102-v78-blank/thumb-20-600.webp 600w, ./assets/work/swarovski/update-20261102-v78-blank/thumb-20.webp 900w" sizes="33vw" src="./assets/work/swarovski/update-20261102-v78-blank/thumb-20.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="15" srcset="./assets/work/swarovski/update-20261102-v78/thumb-21-360.webp 360w, ./assets/work/swarovski/update-20261102-v78/thumb-21-600.webp 600w, ./assets/work/swarovski/update-20261102-v78/thumb-21.webp 900w" sizes="33vw" src="./assets/work/swarovski/update-20261102-v78/thumb-21.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="16" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-22-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-22-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-22.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-22.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="17" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-23-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-23-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-23.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-23.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="18" src="./assets/work/swarovski/update-20261102-v78/slide-24-centered.svg" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="19" srcset="./assets/work/swarovski/update-20261102-1545/thumb-26-360.webp 360w, ./assets/work/swarovski/update-20261102-1545/thumb-26-600.webp 600w, ./assets/work/swarovski/update-20261102-1545/thumb-26.webp 900w" sizes="33vw" src="./assets/work/swarovski/update-20261102-1545/thumb-26.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="20" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-27-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-27-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-27.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-27.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="21" srcset="./assets/work/swarovski/gallery-20261101-2104/thumb-28-360.webp 360w, ./assets/work/swarovski/gallery-20261101-2104/thumb-28-600.webp 600w, ./assets/work/swarovski/gallery-20261101-2104/thumb-28.webp 900w" sizes="33vw" src="./assets/work/swarovski/gallery-20261101-2104/thumb-28.webp" width="2880" height="1620" alt="" draggable="false"><img class="sg-card" data-index="22" srcset="./assets/work/swarovski/update-20261102-1545/thumb-29-360.webp 360w, ./assets/work/swarovski/update-20261102-1545/thumb-29-600.webp 600w, ./assets/work/swarovski/update-20261102-1545/thumb-29.webp 900w" sizes="33vw" src="./assets/work/swarovski/update-20261102-1545/thumb-29.webp" width="2880" height="1620" alt="" draggable="false"></div><h2 id="design-language-title" class="sg-title"><span>CAMON 40 SERIES</span><span>COLLABORATION</span><span>DESIGN EXPLORATIONS</span></h2><img class="sg-focus" src="./assets/work/swarovski/gallery-20261101-2104/slide-6.webp" width="2880" height="1620" alt="" aria-hidden="true"></div></div><div class="sg-reader"><figure class="sg-page" id="ppt-page-6" data-page="6" data-transition="flow"><img src="./assets/work/swarovski/gallery-20261101-2104/slide-6.webp" width="2880" height="1620" loading="eager" decoding="async" alt="Swarovski 01 — 完整原稿第6页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-6.webp" hidden>第6页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-7" data-page="7" data-transition="flow"><img srcset="./assets/work/swarovski/update-20261102-1545/slide-7-960.webp 960w, ./assets/work/swarovski/update-20261102-1545/slide-7-1600.webp 1600w, ./assets/work/swarovski/update-20261102-1545/slide-7.webp 2880w" sizes="100vw" src="./assets/work/swarovski/update-20261102-1545/slide-7.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第7页"><a class="sg-retry" href="./assets/work/swarovski/update-20261102-1545/slide-7.webp" hidden>第7页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-8" data-page="8" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-8-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-8-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-8.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-8.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第8页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-8.webp" hidden>第8页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-9" data-page="9" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-9-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-9-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-9.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-9.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第9页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-9.webp" hidden>第9页加载失败，打开原图</a></figure>
+<div class="sg-dissolve-pair"><figure class="sg-page" id="ppt-page-10" data-page="10" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-10-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-10-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-10.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-10.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第10页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-10.webp" hidden>第10页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-11" data-page="11" data-transition="dissolve"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-11-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-11-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-11.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-11.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第11页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-11.webp" hidden>第11页加载失败，打开原图</a></figure></div>
+<figure class="sg-page" id="ppt-page-12" data-page="12" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-12-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-12-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-12.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-12.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第12页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-12.webp" hidden>第12页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-13" data-page="13" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-13-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-13-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-13.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-13.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第13页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-13.webp" hidden>第13页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-14" data-page="14" data-transition="flow"><img src="./assets/work/swarovski/gallery-20261101-2104/slide-14.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第14页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-14.webp" hidden>第14页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-15" data-page="15" data-transition="flow"><img srcset="./assets/work/swarovski/update-20261102-1545/slide-15-960.webp 960w, ./assets/work/swarovski/update-20261102-1545/slide-15-1600.webp 1600w, ./assets/work/swarovski/update-20261102-1545/slide-15.webp 2880w" sizes="100vw" src="./assets/work/swarovski/update-20261102-1545/slide-15.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第15页"><a class="sg-retry" href="./assets/work/swarovski/update-20261102-1545/slide-15.webp" hidden>第15页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-16" data-page="16" data-transition="flow"><img srcset="./assets/work/swarovski/update-20261102-1545/slide-16-960.webp 960w, ./assets/work/swarovski/update-20261102-1545/slide-16-1600.webp 1600w, ./assets/work/swarovski/update-20261102-1545/slide-16.webp 2880w" sizes="100vw" src="./assets/work/swarovski/update-20261102-1545/slide-16.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第16页"><a class="sg-retry" href="./assets/work/swarovski/update-20261102-1545/slide-16.webp" hidden>第16页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-17" data-page="17" data-transition="flow"><img srcset="./assets/work/swarovski/update-20261102-v78-page17-bg/slide-17-960.webp 960w, ./assets/work/swarovski/update-20261102-v78-page17-bg/slide-17-1600.webp 1600w, ./assets/work/swarovski/update-20261102-v78-page17-bg/slide-17.webp 2880w" sizes="100vw" src="./assets/work/swarovski/update-20261102-v78-page17-bg/slide-17.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第17页"><a class="sg-retry" href="./assets/work/swarovski/update-20261102-v78-page17-bg/slide-17.webp" hidden>第17页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-18" data-page="18" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-18-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-18-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-18.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-18.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第18页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-18.webp" hidden>第18页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-19" data-page="19" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-19-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-19-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-19.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-19.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第19页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-19.webp" hidden>第19页加载失败，打开原图</a></figure>
+<div class="sg-dissolve-pair"><figure class="sg-page" id="ppt-page-20" data-page="20" data-transition="flow"><img srcset="./assets/work/swarovski/update-20261102-v78-blank/slide-20-960.webp 960w, ./assets/work/swarovski/update-20261102-v78-blank/slide-20-1600.webp 1600w, ./assets/work/swarovski/update-20261102-v78-blank/slide-20.webp 2880w" sizes="100vw" src="./assets/work/swarovski/update-20261102-v78-blank/slide-20.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 星座秘境起始画面，手机后方无星座图案与星点"><div class="sg-dissolve-step" aria-hidden="true"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-20-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-20-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-20.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-20.webp" width="2880" height="1620" loading="eager" decoding="async" alt=""></div><a class="sg-retry" href="./assets/work/swarovski/update-20261102-v78-blank/slide-20.webp" hidden>第20页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-21" data-page="21" data-transition="dissolve"><img srcset="./assets/work/swarovski/update-20261102-v78/slide-21-960.webp 960w, ./assets/work/swarovski/update-20261102-v78/slide-21-1600.webp 1600w, ./assets/work/swarovski/update-20261102-v78/slide-21.webp 2880w" sizes="100vw" src="./assets/work/swarovski/update-20261102-v78/slide-21.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第21页"><a class="sg-retry" href="./assets/work/swarovski/update-20261102-v78/slide-21.webp" hidden>第21页加载失败，打开原图</a></figure>
+</div>
+<figure class="sg-page" id="ppt-page-22" data-page="22" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-22-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-22-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-22.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-22.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第22页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-22.webp" hidden>第22页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-23" data-page="23" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-23-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-23-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-23.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-23.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第23页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-23.webp" hidden>第23页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-24" data-page="24" data-transition="flow"><img src="./assets/work/swarovski/update-20261102-v78/slide-24-centered.svg" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第24页"><a class="sg-retry" href="./assets/work/swarovski/update-20261102-v78/slide-24-centered.svg" hidden>第24页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-26" data-page="26" data-transition="flow"><img srcset="./assets/work/swarovski/update-20261102-1545/slide-26-960.webp 960w, ./assets/work/swarovski/update-20261102-1545/slide-26-1600.webp 1600w, ./assets/work/swarovski/update-20261102-1545/slide-26.webp 2880w" sizes="100vw" src="./assets/work/swarovski/update-20261102-1545/slide-26.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第26页"><a class="sg-retry" href="./assets/work/swarovski/update-20261102-1545/slide-26.webp" hidden>第26页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-27" data-page="27" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-27-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-27-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-27.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-27.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第27页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-27.webp" hidden>第27页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-28" data-page="28" data-transition="flow"><img srcset="./assets/work/swarovski/gallery-20261101-2104/slide-28-960.webp 960w, ./assets/work/swarovski/gallery-20261101-2104/slide-28-1600.webp 1600w, ./assets/work/swarovski/gallery-20261101-2104/slide-28.webp 2880w" sizes="100vw" src="./assets/work/swarovski/gallery-20261101-2104/slide-28.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第28页"><a class="sg-retry" href="./assets/work/swarovski/gallery-20261101-2104/slide-28.webp" hidden>第28页加载失败，打开原图</a></figure>
+<figure class="sg-page" id="ppt-page-29" data-page="29" data-transition="flow"><img srcset="./assets/work/swarovski/update-20261102-1545/slide-29-960.webp 960w, ./assets/work/swarovski/update-20261102-1545/slide-29-1600.webp 1600w, ./assets/work/swarovski/update-20261102-1545/slide-29.webp 2880w" sizes="100vw" src="./assets/work/swarovski/update-20261102-1545/slide-29.webp" width="2880" height="1620" loading="lazy" decoding="async" alt="Swarovski 01 — 完整原稿第29页"><a class="sg-retry" href="./assets/work/swarovski/update-20261102-1545/slide-29.webp" hidden>第29页加载失败，打开原图</a></figure></div></section>
+<!-- Swarovski 03 content, rebuilt as a live responsive grid from the original artboard. -->
+<section class="page cmf-development" id="direction-focus" tabindex="-1" aria-labelledby="direction-focus-title">
+ <h2 class="sr-only" id="direction-focus-title">CMF Development Log</h2>
+ <img class="cmf-development-title" src="./assets/work/swarovski/development-responsive-20261103/cmf-development-title.webp" width="1938" height="168" loading="lazy" decoding="async" alt="" aria-hidden="true">
+ <div class="cmf-development-grid" lang="zh-CN">
+  <figure class="cmf-development-media cmf-development-media--decision"><img src="./assets/work/swarovski/development-responsive-20261103/cmf-decision.webp" width="1752" height="1297" loading="lazy" decoding="async" alt="CAMON 40 x Swarovski 完整联名样品，包含手机、网壳及配件"></figure>
+  <article class="cmf-development-copy cmf-development-copy--decision">
+   <h3 lang="en">CMF Decisions</h3><p class="cmf-development-date">2024.10.20</p><p>经多配色打样与内部评审,呈现手机、网壳、卡针项链及充电宝、磁吸环等 AIoT 配件的组合。最终聚焦为黑白渐变。以克制的明度变化承托晶饰闪耀,使视觉重心回到材质与细节,呈现低调轻奢的产品气质.</p>
+  </article>
+  <article class="cmf-development-copy cmf-development-copy--meeting">
+   <h3 lang="en">First In-Person Meeting</h3><p class="cmf-development-date">2024.08.12</p><p>首次与施华洛世奇品牌进行正式线下合作，围绕联名方式、合作模式及产品方向展开讨论。结合晶饰样品与材质参考，探讨品牌元素如何融入手机及配件设计，为后续共创明确方向。</p>
+  </article>
+  <figure class="cmf-development-media cmf-development-media--meeting"><img src="./assets/work/swarovski/development-responsive-20261103/first-meeting.webp" width="1751" height="1039" loading="lazy" decoding="async" alt="首次线下会议中讨论晶饰样品与材质方案"></figure>
+  <figure class="cmf-development-media"><img src="./assets/work/swarovski/development-responsive-20261103/weaving-machine-a.webp" width="830" height="1107" loading="lazy" decoding="async" alt="彩色纤维编织机台的送线机构"></figure>
+  <figure class="cmf-development-media"><img src="./assets/work/swarovski/development-responsive-20261103/weaving-machine-b.webp" width="829" height="1105" loading="lazy" decoding="async" alt="密集丝线在纺织机台上高速交错"></figure>
+  <article class="cmf-development-copy" id="material-details" tabindex="-1">
+   <h3 lang="en">Weaving Development</h3><p class="cmf-development-date">2024.09.13—10.03</p><p>共创方案完成后，在工厂推进彩色纤维编织打样。机台是密集丝线织造高速交错，将色彩组合逐步织成真实纹理</p>
+  </article>
+  <figure class="cmf-development-media"><img src="./assets/work/swarovski/development-responsive-20261103/gradient-fabric-a.webp" width="829" height="1105" loading="lazy" decoding="async" alt="黑白渐变纤维编织半成品"></figure>
+  <figure class="cmf-development-media"><img src="./assets/work/swarovski/development-responsive-20261103/gradient-fabric-b.webp" width="829" height="1105" loading="lazy" decoding="async" alt="浅蓝、银白与粉色渐变纤维编织半成品"></figure>
+  <article class="cmf-development-copy"><h3>渐变织物半成品</h3></article>
+  <article class="cmf-development-copy cmf-development-copy--prototype">
+   <h3 lang="en">Initial Prototype Review</h3><p class="cmf-development-date">2024.10.10</p><p>多色编织方案的首次手板精模评审。将不同配色置于同一产品形态下，对比渐变层次、编织质感与晶饰搭配效果，</p>
+  </article>
+  <figure class="cmf-development-media cmf-development-media--prototype"><img srcset="./assets/work/swarovski/development-responsive-20261103/prototype-review-960.webp 960w, ./assets/work/swarovski/development-responsive-20261103/prototype-review-1600.webp 1600w, ./assets/work/swarovski/development-responsive-20261103/prototype-review.webp 1752w" sizes="100vw" src="./assets/work/swarovski/development-responsive-20261103/prototype-review.webp" width="1752" height="1038" loading="lazy" decoding="async" alt="多色编织方案首次手板精模评审样品"></figure>
  </div>
- <div class="editorial-statement" data-enter><h3>Shared Opportunity</h3><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
 </section>
-<section class="page " id="design-language" tabindex="-1" aria-labelledby="design-language-title">
-<h2 class="display-title" id="design-language-title" data-title>Design Language</h2>
-
- <div class="language-layout" data-enter>
-  <div class="language-notes"><div class="copy"><h3>Source Inspiration</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div><div class="copy"><h3>Design Translation</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div><div class="copy"><h3>Design Principles</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
-  <figure class="media language-media" data-slot="design-language" role="img" aria-label="Design language and inspiration — image placeholder" ></figure>
- </div>
+<section class="page case-kv" id="key-visual" tabindex="-1" aria-labelledby="key-visual-title" hidden>
+ <h2 class="display-title" id="key-visual-title" data-title>Key Visual</h2>
+ <!-- One finished composite supplied by the designer: KV and product highlights together. -->
+ <figure class="media wide case-placeholder" data-slot="main-kv" role="img" aria-label="内部营销KV与卖点秀合成图占位"><span>XXXXX</span></figure>
 </section>
-<section class="page workshop-page" id="design-directions" tabindex="-1" aria-labelledby="design-directions-title">
-<h2 class="display-title" id="design-directions-title" data-title>Workshop<br>Co-Creation</h2>
-
- <div class="workshop-intro" data-enter><h3>Design Directions</h3><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
- <!-- Eight replaceable concepts grouped by direction. A/B/C are provisional identifiers, not project conclusions. -->
- <div class="workshop-board" data-enter>
-  <section class="workshop-group" aria-labelledby="direction-a"><h3 id="direction-a">Direction A</h3><figure class="workshop-concept concept-primary" id="concept-1"><div class="media concept-master" data-slot="workshop-concept-01" role="img" aria-label="Concept 01 — image placeholder"></div><figcaption>Concept 01</figcaption></figure><div class="concept-variants"><figure class="workshop-concept concept-variant" id="concept-2"><div class="media concept-study" data-slot="workshop-concept-02" role="img" aria-label="Concept 02 — image placeholder"></div><figcaption>Concept 02</figcaption></figure><figure class="workshop-concept concept-variant" id="concept-3"><div class="media concept-study" data-slot="workshop-concept-03" role="img" aria-label="Concept 03 — image placeholder"></div><figcaption>Concept 03</figcaption></figure></div></section>
-  <section class="workshop-group" aria-labelledby="direction-b"><h3 id="direction-b">Direction B</h3><figure class="workshop-concept concept-primary" id="concept-4"><div class="media concept-master" data-slot="workshop-concept-04" role="img" aria-label="Concept 04 — image placeholder"></div><figcaption>Concept 04</figcaption></figure><div class="concept-variants"><figure class="workshop-concept concept-variant" id="concept-5"><div class="media concept-study" data-slot="workshop-concept-05" role="img" aria-label="Concept 05 — image placeholder"></div><figcaption>Concept 05</figcaption></figure><figure class="workshop-concept concept-variant" id="concept-6"><div class="media concept-study" data-slot="workshop-concept-06" role="img" aria-label="Concept 06 — image placeholder"></div><figcaption>Concept 06</figcaption></figure></div></section>
-  <section class="workshop-group" aria-labelledby="direction-c"><h3 id="direction-c">Direction C</h3><figure class="workshop-concept concept-primary" id="concept-7"><div class="media concept-master" data-slot="workshop-concept-07" role="img" aria-label="Concept 07 — image placeholder"></div><figcaption>Concept 07</figcaption></figure><div class="concept-variants concept-variants-wide"><figure class="workshop-concept concept-variant" id="concept-8"><div class="media concept-study" data-slot="workshop-concept-08" role="img" aria-label="Concept 08 — image placeholder"></div><figcaption>Concept 08</figcaption></figure></div></section>
- </div>
-</section>
-<section class="page " id="design-development" tabindex="-1" aria-labelledby="design-development-title">
-<h2 class="display-title" id="design-development-title" data-title>Design Development</h2>
-
- <div class="development-pair" data-enter>
-  <section aria-labelledby="development-a"><h3 id="development-a">Direction A</h3><figure class="media development-media" data-slot="development-a" role="img" aria-label="Direction A development — image placeholder" ></figure></section>
-  <section aria-labelledby="development-b"><h3 id="development-b">Direction B</h3><figure class="media development-media" data-slot="development-b" role="img" aria-label="Direction B development — image placeholder" ></figure></section>
- </div>
- <div class="comparison" data-enter><h3>Design Comparison</h3><table><caption class="sr-only">Comparison of the two priority design directions</caption><colgroup><col class="comparison-label"><col><col></colgroup><thead><tr><th scope="col">Design Criteria</th><th scope="col">Direction A</th><th scope="col">Direction B</th></tr></thead><tbody><tr><th scope="row">Form &amp; Proportion</th><td><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></td><td><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></td></tr><tr><th scope="row">Crystal Placement</th><td><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></td><td><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></td></tr><tr><th scope="row">Surface Expression</th><td><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></td><td><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></td></tr></tbody></table></div>
-</section>
-<section class="page " id="direction-focus" tabindex="-1" aria-labelledby="direction-focus-title">
-<h2 class="display-title" id="direction-focus-title" data-title>Direction Focus</h2>
-
- <div class="focus-layout" data-enter>
-  <figure class="media selected-media" data-slot="selected-direction" role="img" aria-label="Selected design direction — image placeholder" ></figure>
-  <div class="focus-notes"><div class="copy"><h3>Selected Direction</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div><div class="copy"><h3>Decision Rationale</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
- </div>
- <section class="criteria" aria-labelledby="criteria-title" data-enter><h3 id="criteria-title">Selection Criteria</h3><div class="criteria-grid"><div class="copy"><h3>Brand Fit</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div><div class="copy"><h3>Design Coherence</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div><div class="copy"><h3>CMF Potential</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div></section>
-</section>
-<section class="page " id="material-details" tabindex="-1" aria-labelledby="material-details-title">
-<h2 class="display-title" id="material-details-title" data-title>CMF Refinement</h2>
-
- <div class="refinement-grid" data-enter>
-  <div class="refinement-main"><h3>Color &amp; Contrast</h3><figure class="media portrait" data-slot="color-contrast" role="img" aria-label="Color and contrast refinement — image placeholder" ></figure><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
-  <div class="refinement-details">
-   <div class="refinement-unit"><h3>Material &amp; Finish</h3><figure class="media landscape" data-slot="material-finish" role="img" aria-label="Material and surface finish — image placeholder" ></figure><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
-   <div class="refinement-unit"><h3>Crystal &amp; Detail</h3><figure class="media landscape" data-slot="crystal-detail" role="img" aria-label="Crystal and detail refinement — image placeholder" ></figure><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
+<!-- Screenshot reference: offset paragraph, TEAM list, right-aligned project signature. -->
+<section class="case-conclusion" id="conclusion" tabindex="-1" aria-label="项目总结与团队">
+ <div class="case-conclusion-body">
+  <p class="case-conclusion-copy" lang="zh-CN">在 CAMON × Swarovski 项目中，主导品牌IP联名设计、新工艺编织打样、样品评审，在比较不同配色、纹理与晶饰的搭配中记录了这一过程，最终决策聚焦黑白渐变，用克制的底色承托晶饰闪耀。并且从单件产品到整套礼盒，连同 AIOT 配件形成统一的视觉语言。虽然项目以遗憾收尾，但体验非常独特</p>
+  <div class="case-conclusion-team" lang="en" aria-label="Project team">
+   <p class="case-conclusion-team-label">TEAM</p>
+   <ul><li>SHUAI <strong>|</strong> YANG</li><li>WAN QIAO | YAO</li></ul>
   </div>
+  <p class="case-conclusion-signature" lang="en">CAMON X SWAROVSKI.</p>
  </div>
-</section>
-<section class="page " id="final-design" tabindex="-1" aria-labelledby="final-design-title">
-<h2 class="display-title" id="final-design-title" data-title>Final Design</h2>
-
- <div class="final-overall" data-enter><figure class="media wide" data-slot="final-overall" role="img" aria-label="Overall final design — image placeholder" ></figure><div class="editorial-statement"><h3>Overall Design</h3><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div></div>
- <section class="final-details" aria-labelledby="resolution-title" data-enter><h3 id="resolution-title">Detail Resolution</h3><div class="detail-pair"><figure class="media landscape" data-slot="final-detail-form" role="img" aria-label="Final form detail — image placeholder" ></figure><figure class="media landscape" data-slot="final-detail-finish" role="img" aria-label="Final finish detail — image placeholder" ></figure></div></section>
-</section>
-<section class="page " id="key-visual" tabindex="-1" aria-labelledby="key-visual-title">
-<h2 class="display-title" id="key-visual-title" data-title>Key Visual</h2>
-
- <div class="editorial-statement kv-intent" data-enter><h3>Visual Concept</h3><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
- <div class="master-visual" data-enter><figure class="media wide" data-slot="main-kv" role="img" aria-label="Master campaign visual — image placeholder" ></figure><h3>Master Visual</h3></div>
-</section>
-<section class="page " id="applications" tabindex="-1" aria-labelledby="applications-title">
-<h2 class="display-title" id="applications-title" data-title>Campaign<br>Applications</h2>
-
- <div class="campaign-layout" data-enter>
-  <div class="digital-application"><h3>Digital Campaign</h3><figure class="media tall" data-slot="digital-campaign" role="img" aria-label="Digital campaign application — image placeholder" ></figure><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
-  <div class="outdoor-application" id="campaign"><h3>Out-of-Home</h3><figure class="media wide" data-slot="out-of-home" role="img" aria-label="Out-of-home campaign application — image placeholder" ></figure><div class="copy"><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
- </div>
-</section>
-<section class="page summary-page" id="conclusion" tabindex="-1" aria-labelledby="conclusion-title">
-<h2 class="display-title" id="conclusion-title" data-title>Design Summary</h2>
-
- <div class="summary-grid" data-enter><div class="copy"><h3>Design Intent</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div><div class="copy"><h3>Final Direction</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div><div class="copy"><h3>Brand Expression</h3><p>XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX</p></div></div>
 </section>
 </div>
 </main>
 <footer class="closing project-footer" id="contact" tabindex="-1" aria-label="Project closing">
 <div class="footer-meta">
         <a class="footer-back" href="./index.html#work">Back</a>
-        <div class="footer-contact"><p>XXXX</p><p>XXXX</p></div>
+        <address class="footer-contact">
+          <a href="tel:18591415719">Tel：18591415719</a>
+          <a href="mailto:1648937063@qq.com">Email：1648937063@qq.com</a>
+        </address>
         <div class="footer-actions">
           <span class="sling-top">
             <svg class="sling-fx" viewBox="-40 -40 80 80" aria-hidden="true">

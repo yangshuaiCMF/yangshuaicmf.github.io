@@ -1,4 +1,4 @@
-﻿const heroTitle = document.querySelector(".hero h1");
+const heroTitle = document.querySelector(".hero h1");
 
 if (heroTitle) {
   const lines = Array.from(heroTitle.children);
@@ -12,6 +12,23 @@ if (heroTitle) {
       const charNode = document.createElement("span");
       charNode.className = "hero-char";
       charNode.textContent = char === " " ? "\u00a0" : char;
+      const glyph = window.heroGlyphs?.[char];
+      if (glyph) {
+        charNode.classList.add("hero-fixed-glyph");
+        charNode.textContent = "";
+        const label = document.createElement("span");
+        label.className = "hero-glyph-label";
+        label.textContent = char;
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", `0 0 ${glyph.width} ${glyph.cap}`);
+        svg.setAttribute("aria-hidden", "true");
+        svg.style.width = `${glyph.width / 1000}em`;
+        svg.style.height = `${glyph.cap / 1000}em`;
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", glyph.d);
+        svg.appendChild(path);
+        charNode.append(label, svg);
+      }
       charNode.style.setProperty("--char-delay", `${charIndex * 16}ms`);
       line.appendChild(charNode);
       charIndex += 1;
@@ -20,6 +37,25 @@ if (heroTitle) {
 
   heroTitle.classList.add("is-split");
 }
+// The eyebrow shares the title's character reveal and replay controller.
+const heroEyebrow = document.querySelector(".hero-copy .eyebrow");
+if (heroEyebrow) {
+  const text = heroEyebrow.textContent.trim();
+  heroEyebrow.setAttribute("aria-label", text);
+  heroEyebrow.textContent = "";
+  const line = document.createElement("span");
+  line.className = "hero-eyebrow-line";
+  line.setAttribute("aria-hidden", "true");
+  Array.from(text).forEach((char, index) => {
+    const node = document.createElement("span");
+    node.className = "hero-char";
+    node.textContent = char === " " ? "\u00a0" : char;
+    node.style.setProperty("--char-delay", `${index * 16}ms`);
+    line.appendChild(node);
+  });
+  heroEyebrow.appendChild(line);
+}
+
 const revealItems = document.querySelectorAll(".reveal");
 
 const observer = new IntersectionObserver(
@@ -43,14 +79,19 @@ revealItems.forEach((item, index) => {
 
 const nav = document.querySelector(".nav");
 
-window.addEventListener(
-  "scroll",
-  () => {
-    if (!nav) return;
-    nav.classList.toggle("is-scrolled", window.scrollY > 24);
-  },
-  { passive: true }
-);
+function updateNavScrollState() {
+  if (!nav) return;
+  nav.classList.toggle("is-scrolled", window.scrollY > 24);
+  if (nav.hasAttribute("data-home-nav")) {
+    const hidden = window.scrollY > 2;
+    nav.classList.toggle("is-home-nav-hidden", hidden);
+    nav.inert = hidden;
+  }
+}
+
+window.addEventListener("scroll", updateNavScrollState, { passive: true });
+window.addEventListener("pageshow", updateNavScrollState);
+updateNavScrollState();
 
 const heroSection = document.querySelector(".hero");
 let heroLoopTimer = null;
@@ -95,65 +136,133 @@ if (heroSection) {
 
 
 const mediaTiles = document.querySelectorAll(".work-tile-media");
+const touchMediaMode = window.matchMedia('(hover: none) and (pointer: coarse)');
+const touchMedia = [];
+let mediaTouching = false, mediaSettleTimer = 0, mediaScrollFrame = 0;
+
+function centeredMedia() {
+  if (!touchMediaMode.matches || mediaTouching || document.hidden) return null;
+  return touchMedia.map(item => {
+    const r = item.visual.getBoundingClientRect();
+    const visible = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0));
+    return {item, distance: Math.abs((r.top + r.bottom) / 2 - innerHeight / 2),
+      eligible: visible >= Math.min(r.height, innerHeight) * .6};
+  }).filter(entry => entry.eligible && entry.distance <= innerHeight * .18)
+    .sort((a, b) => a.distance - b.distance)[0]?.item || null;
+}
+
+function settleMedia() {
+  clearTimeout(mediaSettleTimer);
+  if (!touchMediaMode.matches) return;
+  const candidate = centeredMedia();
+  touchMedia.forEach(item => {
+    const r = item.visual.getBoundingClientRect();
+    if (r.bottom <= 0 || r.top >= innerHeight) item.stop(true);
+    else if (item !== candidate) item.stop(false);
+  });
+  if (candidate) mediaSettleTimer = setTimeout(() => {
+    if (centeredMedia() === candidate) candidate.play();
+  }, 220);
+}
+
+function pauseTouchMedia() {
+  clearTimeout(mediaSettleTimer);
+  touchMedia.forEach(item => item.stop(false));
+}
+
+addEventListener('touchstart', () => {
+  mediaTouching = true;
+  if (touchMediaMode.matches) pauseTouchMedia();
+}, {passive: true});
+for (const type of ['touchend', 'touchcancel']) addEventListener(type, event => {
+  mediaTouching = event.touches.length > 0;
+  if (!mediaTouching) settleMedia();
+}, {passive: true});
+addEventListener('scroll', () => {
+  if (!touchMediaMode.matches) return;
+  pauseTouchMedia();
+  if (!mediaScrollFrame) mediaScrollFrame = requestAnimationFrame(() => {
+    mediaScrollFrame = 0; settleMedia();
+  });
+}, {passive: true});
+addEventListener('resize', settleMedia, {passive: true});
+addEventListener('pageshow', settleMedia);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pauseTouchMedia();
+  else settleMedia();
+});
+touchMediaMode.addEventListener('change', () => {
+  pauseTouchMedia();
+  touchMedia.forEach(item => item.stop(true));
+  mediaTouching = false; settleMedia();
+});
 
 mediaTiles.forEach((tile) => {
   const video = tile.querySelector("video");
   if (!video) return;
-  const motion = matchMedia("(prefers-reduced-motion: reduce)");
-  let loaded = false;
-  let hovered = false;
-  let focused = false;
-  let resetTimer = 0;
-  let playGeneration = 0;
+
   video.muted = true;
   video.loop = true;
   video.playsInline = true;
   video.preload = "none";
-
+  let loaded = false;
   const loadVideo = () => {
     if (loaded) return;
     loaded = true;
-    video.querySelectorAll("source[data-src]").forEach(source => {
+    video.querySelectorAll('source[data-src]').forEach(source => {
       source.src = source.dataset.src;
       delete source.dataset.src;
     });
-    video.preload = "auto";
+    video.preload = 'auto';
     video.load();
   };
-  const stopVideo = () => {
-    playGeneration += 1;
-    video.pause();
-    tile.classList.remove("is-playing");
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => {
-      if (!hovered && !focused && video.readyState >= 1) video.currentTime = 0;
-    }, 80);
+
+  const markVideoReady = () => {
+    tile.classList.add("is-ready");
   };
-  const syncVideo = () => {
-    if ((!hovered && !focused) || motion.matches || document.hidden) {
-      stopVideo();
-      return;
-    }
+
+  video.addEventListener("canplay", markVideoReady, { once: true });
+  if (video.readyState >= 3) markVideoReady();
+
+  let playVersion = 0, resetTimer = 0;
+  const item = {
+    visual: tile.querySelector('.work-tile-visual'),
+    stop(reset) {
+      playVersion++;
+      video.pause();
+      if (reset) {
+        tile.classList.remove('is-playing');
+        try { video.currentTime = 0; } catch { /* Metadata may still be loading. */ }
+      }
+    },
+    play() {
     clearTimeout(resetTimer);
+    const version = ++playVersion;
     loadVideo();
-    const generation = ++playGeneration;
-    tile.classList.add("is-playing");
-    video.play().then(() => {
-      if (generation !== playGeneration) return;
-      if ((!hovered && !focused) || motion.matches || document.hidden) stopVideo();
-    }).catch(() => {
-      if (generation === playGeneration) tile.classList.remove("is-playing");
-    });
+    const playPromise = video.play();
+    if (playPromise) {
+      playPromise.then(() => {
+        if (version !== playVersion) return;
+        tile.classList.add('is-playing');
+      }).catch(() => {
+        if (version === playVersion) tile.classList.remove('is-playing');
+      });
+    }
+    }
   };
-  video.addEventListener("canplay", () => tile.classList.add("is-ready"), { once: true });
-  video.addEventListener("error", () => { tile.classList.remove("is-ready"); stopVideo(); });
-  tile.addEventListener("mouseenter", () => { hovered = true; syncVideo(); });
-  tile.addEventListener("mouseleave", () => { hovered = false; syncVideo(); });
-  tile.addEventListener("focusin", () => { focused = true; syncVideo(); });
-  tile.addEventListener("focusout", () => { focused = false; syncVideo(); });
-  motion.addEventListener("change", syncVideo);
-  document.addEventListener("visibilitychange", syncVideo);
+  touchMedia.push(item);
+  tile.addEventListener("mouseenter", () => {
+    if (!touchMediaMode.matches) item.play();
+  });
+
+  tile.addEventListener("mouseleave", () => {
+    if (touchMediaMode.matches) return;
+    item.stop(false);
+    tile.classList.remove('is-playing');
+    resetTimer = setTimeout(() => item.stop(true), 80);
+  });
 });
+settleMedia();
 
 
 const languageToggle = document.querySelector("[data-lang-toggle]");

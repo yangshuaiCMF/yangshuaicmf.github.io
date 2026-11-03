@@ -3,17 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="data:," />
     <title>Yang Shuai | Mobile Product CMF Lead</title>
     <meta
       name="description"
       content="Yang Shuai portfolio website for mobile product CMF leadership, TECNO CAMON, TECNO SPARK and design exploration."
     />
     <link rel="stylesheet" href="./styles.css?v=20260803-hero-four-lines1" />
-  </head>
+  <link rel="stylesheet" href="./interaction-feedback.css">
+<script src="./interaction-feedback.js" defer></script>
+</head>
   <body>
     <div class="site-shell">
-      <header class="nav">
+      <header class="nav" data-home-nav>
         <a class="brand" href="#hero" aria-label="Back to top">YS / CMF</a>
         <nav class="nav-links" aria-label="Primary navigation">
           <a href="#hero">Home</a>
@@ -27,14 +28,9 @@
 
       <main>
         <section id="hero" class="hero section-dark is-playing">
-          <div class="hero-meta">
-            <span>2026</span>
-            <span>portfolio / design</span>
-          </div>
-
           <div class="hero-sequence" aria-hidden="true">
             <div class="hero-cut-stage">
-              <img fetchpriority="high" decoding="async" src="./assets/hero-sequence/01.webp" alt="" />
+              <img src="./assets/hero-sequence/01.webp" alt="" />
               <img src="./assets/hero-sequence/02.webp" alt="" />
               <img src="./assets/hero-sequence/03.webp" alt="" />
               <img src="./assets/hero-sequence/04.webp" alt="" />
@@ -44,7 +40,7 @@
               <img src="./assets/hero-sequence/08.webp" alt="" />
             </div>
             <div class="hero-column-stage">
-              <img fetchpriority="high" decoding="async" style="--i: 0" src="./assets/hero-sequence/01.webp" alt="" />
+              <img style="--i: 0" src="./assets/hero-sequence/01.webp" alt="" />
               <img style="--i: 1" src="./assets/hero-sequence/02.webp" alt="" />
               <img style="--i: 2" src="./assets/hero-sequence/03.webp" alt="" />
               <img style="--i: 3" src="./assets/hero-sequence/04.webp" alt="" />
@@ -103,7 +99,7 @@
             <div class="work-tile-grid">
               <a class="work-tile work-tile-media" href="./camon30.html" aria-label="CAMON 30 project">
                 <div class="work-tile-visual">
-                  <img loading="lazy" decoding="async" width="2200" height="1716" class="work-tile-poster" src="./assets/work/camon30/CL8_3_preview.webp" alt="CAMON 30 project still" />
+                  <img class="work-tile-poster" src="./assets/work/camon30/CL8_3_preview.webp" alt="CAMON 30 project still" />
                   <video class="work-tile-video" muted loop playsinline preload="none" poster="./assets/work/camon30/CL8_3_preview.webp">
                     <source data-src="./assets/work/camon30/camon30-hover-web.mp4" type="video/mp4" />
                   </video>
@@ -112,7 +108,7 @@
               </a>
               <a class="work-tile work-tile-media" href="./loewe.html" aria-label="CAMON 30 LOEWE Design Edition project">
                 <div class="work-tile-visual">
-                  <img loading="lazy" decoding="async" width="2200" height="1716" class="work-tile-poster" src="./assets/work/camon40/CL8_1_preview.webp" alt="CAMON 30 LOEWE Design Edition project still" />
+                  <img class="work-tile-poster" src="./assets/work/camon40/CL8_1_preview.webp" alt="CAMON 30 LOEWE Design Edition project still" />
                   <video class="work-tile-video" muted loop playsinline preload="none" poster="./assets/work/camon40/CL8_1_preview.webp">
                     <source data-src="./assets/work/camon40/loewe-hover-web.mp4" type="video/mp4" />
                   </video>
@@ -121,12 +117,14 @@
               </a>
               <a class="work-tile work-tile-media work-tile-poster-only" href="./camon40.html" aria-label="CAMON 40 project">
                 <div class="work-tile-visual">
-                  <img class="work-tile-poster" srcset="./assets/work/camon40/camon40-home-main-green5.web-960.webp 960w, ./assets/work/camon40/camon40-home-main-green5.web.webp 1440w" sizes="100vw" src="./assets/work/camon40/camon40-home-main-green5.web.webp" width="3396" height="2879" loading="lazy" decoding="async" alt="CAMON 40 Series green and silver product design" />
+                  <img class="work-tile-poster" src="./assets/work/camon40/camon40-home-pagination-kv-20261027.webp" width="2880" height="2441" loading="lazy" decoding="async" alt="CAMON 40 Series green and silver product design" />
                 </div>
                 <p>CAMON 40 Series</p>
               </a>
-              <a class="work-tile" href="./swarovski.html" aria-label="CAMON 40 Swarovski project">
-                <div class="work-tile-visual">CAMON 40</div>
+              <a class="work-tile work-tile-media work-tile-poster-only" href="./swarovski.html" aria-label="CAMON 40 Swarovski project">
+                <div class="work-tile-visual">
+                  <img class="work-tile-poster" srcset="./assets/work/swarovski/swarovski-home-pagination-kv3-20261103-960.webp 960w, ./assets/work/swarovski/swarovski-home-pagination-kv3-20261103-1600.webp 1600w, ./assets/work/swarovski/swarovski-home-pagination-kv3-20261103.webp 2880w" sizes="(max-width: 760px) 100vw, 50vw" src="./assets/work/swarovski/swarovski-home-pagination-kv3-20261103.webp" width="2880" height="2441" loading="lazy" decoding="async" alt="CAMON 40 Series × Swarovski 联名礼盒设计" />
+                </div>
                 <p>CAMON 40 Series × Swarovski | A Cross-Brand Vision</p>
               </a>
             </div>
@@ -158,11 +156,11 @@
           </div>
 
           <article class="profile-image-page reveal" aria-label="Profile resume page 1">
-            <img loading="lazy" decoding="async" width="7680" height="3628" srcset="./assets/profile/profile-resume-01-enhanced.web-960.webp 960w, ./assets/profile/profile-resume-01-enhanced.web-1600.webp 1600w, ./assets/profile/profile-resume-01-enhanced.web.webp 3840w" sizes="100vw" src="./assets/profile/profile-resume-01-enhanced.web.webp" alt="Profile Resume Page 1" />
+            <img srcset="./assets/profile/profile-resume-01-enhanced.web-960.webp 960w, ./assets/profile/profile-resume-01-enhanced.web-1600.webp 1600w, ./assets/profile/profile-resume-01-enhanced.web.webp 3840w" sizes="100vw" src="./assets/profile/profile-resume-01-enhanced.web.webp" alt="Profile Resume Page 1" />
           </article>
 
           <article class="profile-image-page reveal" aria-label="Profile resume page 2">
-            <img loading="lazy" decoding="async" width="7680" height="3628" srcset="./assets/profile/profile-resume-02-enhanced.web-960.webp 960w, ./assets/profile/profile-resume-02-enhanced.web-1600.webp 1600w, ./assets/profile/profile-resume-02-enhanced.web.webp 3840w" sizes="100vw" src="./assets/profile/profile-resume-02-enhanced.web.webp" alt="Profile Resume Page 2" />
+            <img srcset="./assets/profile/profile-resume-02-enhanced.web-960.webp 960w, ./assets/profile/profile-resume-02-enhanced.web-1600.webp 1600w, ./assets/profile/profile-resume-02-enhanced.web.webp 3840w" sizes="100vw" src="./assets/profile/profile-resume-02-enhanced.web.webp" alt="Profile Resume Page 2" />
           </article>
         </section>
 
@@ -201,6 +199,7 @@
       </main>
     </div>
 
+    <script src="./hero-glyphs.js"></script>
     <script src="./script.js?v=20260629-workmediafix2"></script>
   </body>
 </html>
