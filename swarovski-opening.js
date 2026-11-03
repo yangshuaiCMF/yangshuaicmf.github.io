@@ -10,11 +10,13 @@ let frame=0,lastTime=0,progress=0,target=0,height=900,stageHeight=0,visualHeight
 let scaleFactor=1,measuredWidth=0,headingHeight=900,titleHalfHeight=0;
 function draw(p){
  stage.style.setProperty('--kv-tail-opacity',smooth((p-.8)/.2));
- const rise=p*(2-p),scale=mix(.38,1,rise);
+ const mobile=coarse.matches&&innerWidth<=980;
+ const rise=p*(2-p),scale=mix(mobile?.62:.38,1,rise);
  const finalY=Math.max(0,visualHeight-mediaHeight-36.54125);
- const y=visualOffset+mix(visualHeight*1.03,finalY,rise);
+ const firstY=mobile?finalY+mediaHeight*.18:visualHeight*1.03;
+ const y=visualOffset+mix(firstY,finalY,rise);
  media.style.transform='translate3d(0,'+y+'px,0) scale('+scale+')';
- const headingY=-height*.63*smooth(p/.94);
+ const headingY=mobile?0:-height*.63*smooth(p/.94);
  heading.style.transform='translate3d(0,'+headingY+'px,0)';
  caption.style.opacity=String(1-smooth((p-.06)/.04));
  const originalFade=1-smooth((p-.22)/.55);
@@ -36,18 +38,22 @@ function tick(time){
 function scroll(){if(!reduce.matches&&!frame)frame=requestAnimationFrame(tick);}
 function measure(force=false){
  if(!force&&coarse.matches&&measuredWidth===innerWidth)return;
+ document.documentElement.classList.toggle('opening-mobile-flow',coarse.matches&&innerWidth<=980&&!reduce.matches);
  measuredWidth=innerWidth;scaleFactor=document.body.getBoundingClientRect().width/1440;
- height=900;mediaHeight=media.offsetHeight;headingHeight=innerHeight/scaleFactor;
+ height=900;mediaHeight=media.offsetHeight;
+ const mobile=coarse.matches&&innerWidth<=980,viewport=innerHeight/scaleFactor;
+ headingHeight=viewport*(mobile?.55:1);
  titleHalfHeight=heading.querySelector('h1').offsetHeight/2;
- visualHeight=Math.max(height,mediaHeight+90);
+ visualHeight=mobile?headingHeight+mediaHeight+36.54125:Math.max(height,mediaHeight+90);
  const stageSize=Math.max(visualHeight,headingHeight);
  opening.style.setProperty('--opening-heading-height',headingHeight+'px');
  opening.style.setProperty('--opening-stage-height',stageSize+'px');
  stageHeight=stage.clientHeight;visualOffset=Math.max(0,stageHeight-visualHeight);
  opening.style.setProperty('--opening-visual-height',visualHeight+'px');
  opening.style.setProperty('--opening-visual-offset',visualOffset+'px');
- travel=Math.min(stageHeight*1.2,1620);opening.style.setProperty('--opening-travel',travel+'px');
- start=(opening.getBoundingClientRect().top+scrollY)/scaleFactor;end=start+opening.offsetHeight;scroll();
+ travel=mobile?Math.max(60,Math.min(viewport*.32,mediaHeight*.65)):Math.min(stageHeight*1.2,1620);opening.style.setProperty('--opening-travel',(mobile?0:travel)+'px');
+ const top=(opening.getBoundingClientRect().top+scrollY)/scaleFactor;
+ start=top+(mobile?Math.max(0,headingHeight+mediaHeight/2-viewport/2):0);end=top+opening.offsetHeight;scroll();
 }
 function setup(){
  cancelAnimationFrame(frame);frame=0;lastTime=0;
