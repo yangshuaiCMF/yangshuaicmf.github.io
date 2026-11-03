@@ -16,6 +16,8 @@ function resumeReload(){
 }
 // Touch stays at the authored 1x speed. Desktop middle-button cruise retains 3x.
 const coarse=matchMedia('(hover: none) and (pointer: coarse)');
+const mobileLayout=()=>coarse.matches&&innerWidth<=980;
+const previewScale=()=>mobileLayout()?.84:760/1440;
 let middleFast=false;
 function motionRate(){return !reduce.matches&&middleFast?3:1;}
 function exposeMotionRate(){const rate=String(motionRate());if(root.dataset.motionRate!==rate)root.dataset.motionRate=rate;}
@@ -32,14 +34,21 @@ root.querySelector('.sg-title')?.remove();root.querySelector('.sg-focus')?.remov
 const viewport=document.createElement('div');viewport.className='sg-window';stage.append(viewport);
 const painted=new WeakMap();
 function paint(node,key,value){let state=painted.get(node);if(!state){state={};painted.set(node,state);}if(state[key]!==value){state[key]=value;node.style[key]=value;}}
+const mobileLoading=coarse.matches&&innerWidth<=980;
+function hydrate(img){
+  if(!img)return;img.closest('picture.sg-mobile-deferred')?.querySelector('source')?.remove();img.loading='eager';
+  if(img.dataset.sgSrcset){img.srcset=img.dataset.sgSrcset;delete img.dataset.sgSrcset;}
+  if(img.dataset.sgSrc){img.src=img.dataset.sgSrc;delete img.dataset.sgSrc;}
+}
 let galleryLoaded=false,entryReady=false,entryPending=false,entryTimeout=0,entryOrigin=0;
 function loadGallery(){
   if(galleryLoaded)return;galleryLoaded=true;
   const first=order.filter((_,cell)=>cells[cell].r<3&&cells[cell].c<3).map(i=>cards[i]);
-  for(const img of [...first,...cards.filter(img=>!first.includes(img))]){if(img.dataset.sgSrcset)img.srcset=img.dataset.sgSrcset;if(img.dataset.sgSrc)img.src=img.dataset.sgSrc;}
-  loadNear();
+  (mobileLoading?first:[...first,...cards.filter(img=>!first.includes(img))]).forEach(hydrate);
+  if(!mobileLoading)loadNear();
   Promise.allSettled(first.map(img=>img.decode())).then(()=>{
     entryReady=true;clearTimeout(entryTimeout);root.removeAttribute('data-loading');
+    cards.filter(img=>!first.includes(img)).forEach(hydrate);loadNear();loadFollowing();
     const pending=entryPending;entryPending=false;const rect=root.getBoundingClientRect();
     if(pending&&phase==='ready'&&Math.abs(scrollY-entryOrigin)<8&&rect.top<innerHeight&&rect.bottom>0)launch();
   });
@@ -54,13 +63,17 @@ function leaveStage(event,delta){const owned=stageLocked;unlockStage();nativeExi
 function alignStage(){if(aligning)return;lockStage();aligning=true;const from=scrollY,target=base(),began=performance.now();let previous=began,elapsedMotion=0;const step=now=>{if(!aligning)return;elapsedMotion+=(now-previous)*motionRate(now);previous=now;const u=clamp(elapsedMotion/360);jump(from+(target-from)*smooth(u));if(u<1)requestAnimationFrame(step);else{aligning=false;const elapsed=now-began;if(phase==='entry'||phase==='travel')start+=elapsed;if(phase==='preview')previewStart+=elapsed;frameTime=now;lastInput=now;settle=now+100;schedule();}};requestAnimationFrame(step);}
 function setPhase(p){if(p!=='ready'&&p!=='reading')lockStage();phase=p;if(p!=='parked')nativeExit=false;root.dataset.phase=p;if(['preview','parked','backMiddle','exitReady'].includes(p))boundaryNeedsFresh=true;}
 function schedule(){if(!raf&&reloadPausedAt===null)raf=requestAnimationFrame(draw);}
-const pageImages=[...reader.querySelectorAll('.sg-page:not([data-transition="dissolve"]) > img')];let loadedPage=-1;
+const pageImages=[...reader.querySelectorAll('.sg-page:not([data-transition="dissolve"]) > img,.sg-page:not([data-transition="dissolve"]) > picture > img')];let loadedPage=-1;
 // Each pair owns its progress; both reading modes use the same images and state.
 const dissolves=[...reader.querySelectorAll('[data-transition="dissolve"]')].map(page=>{
   const source=page.previousElementSibling,step=source.querySelector('.sg-dissolve-step');
   return {page,source,step,image:page.querySelector('img'),index:pageImages.indexOf(source.querySelector('img')),value:-1,unavailable:false,duration:step?1550:820};
 });
 let pageFade=null,pageFadeRaf=0,pageFadeRest=null;
+// Touch inertia belongs to the gesture that triggered a dissolve. Release only on a new gesture.
+let mobileDissolveHold=null,mobileScrollIntent=null;
+function releaseMobileHold(){mobileDissolveHold=null;mobileScrollIntent=null;document.documentElement.classList.remove('sg-dissolve-locked');}
+
 // Use screen coordinates: the same visual center applies at every CSS zoom/viewport ratio.
 function dissolveAnchor(pair){const r=pair.source.getBoundingClientRect();return scrollY+r.top+(r.height-innerHeight)/2;}
 function setPageDissolve(pair,value){
@@ -74,12 +87,15 @@ for(const pair of dissolves){pair.page.parentElement.classList.add('sg-dissolve-
 function clearPageFade(){
   if(pageFadeRaf)cancelAnimationFrame(pageFadeRaf);pageFadeRaf=0;
   if(pageFade)setPageDissolve(pageFade.pair,pageFade.progress>=.5?1:0);
-  pageFade=null;pageFadeRest=null;dissolveIntent=null;document.documentElement.classList.remove('sg-dissolve-locked');
+  pageFade=null;pageFadeRest=null;dissolveIntent=null;releaseMobileHold();
 }
 function finishPageFade(end){
   const f=pageFade;if(!f)return;f.progress=end;setPageDissolve(f.pair,end);clearPageFade();readingLastY=scrollY;
   if(f.kind==='window')windowReadTarget=end?null:(f.rewindTarget??offset);
-  else pageFadeRest={pair:f.pair,until:performance.now()+140};
+  else if(coarse.matches){
+    mobileDissolveHold={anchor:f.source};mobileScrollIntent=null;
+    document.documentElement.classList.add('sg-dissolve-locked');jump(f.source);
+  }else pageFadeRest={pair:f.pair,until:performance.now()+140};
 }
 function paintPageFade(now){
   pageFadeRaf=0;const f=pageFade;if(!f)return;
@@ -97,11 +113,22 @@ function paintPageFade(now){
 }
 async function preparePageFade(f){
   const images=[f.pair.source.querySelector('img'),f.pair.image];if(f.pair.step)images.push(f.pair.step.querySelector('img'));
-  for(const image of images)image.loading='eager';
+  for(const image of images)hydrate(image);
   let decodedResult;
   const decoded=Promise.all(images.map(image=>image.decode())).then(()=>true,()=>false).then(value=>{decodedResult=value;return value;});
-  const loaded=await Promise.race([decoded,new Promise(resolve=>setTimeout(()=>resolve(false),2500))]);
+  const loaded=await Promise.race([decoded,new Promise(resolve=>setTimeout(()=>resolve(false),coarse.matches&&f.kind==='reading'?10000:2500))]);
   if(pageFade!==f)return;
+  if(!loaded&&coarse.matches&&f.kind==='reading'){
+    // A failed/slow image must not advance to the other page. Keep the starting frame;
+    // a new gesture retries at the same anchor, and navigation remains available.
+    const initial=f.progress;clearPageFade();setPageDissolve(f.pair,initial);
+    f.pair.unavailable=images.some(image=>image.complete&&!image.naturalWidth);
+    f.pair.waiting=decodedResult===undefined;
+    if(f.pair.waiting)decoded.then(ok=>{f.pair.waiting=false;f.pair.unavailable=!ok&&images.some(image=>image.complete&&!image.naturalWidth);});
+    if(f.pair.unavailable){for(const image of images)if(image.complete&&!image.naturalWidth){const retry=image.closest('.sg-page')?.querySelector('.sg-retry');if(retry)retry.hidden=false;}return;}
+    mobileDissolveHold={anchor:f.source};document.documentElement.classList.add('sg-dissolve-locked');jump(f.source);
+    return;
+  }
   if(!loaded){
     // A slow download is recoverable: release the gesture, retain the visible frame.
     f.pair.unavailable=images.some(image=>image.complete&&!image.naturalWidth);
@@ -121,8 +148,10 @@ function beginPageFade(pair,target,inWindow=false){
   else pageFadeRaf=requestAnimationFrame(paintPageFade);
 }
 function dissolveInput(delta,e){
+  if(mobileDissolveHold){e.preventDefault();return true;}
   if(pageFade){
     e.preventDefault();const target=delta>0?1:0;
+    if(coarse.matches&&pageFade.kind==='reading')return true;
     if(pageFade.mode==='fade')pageFade.target=target;
     else if(target!==pageFade.target)clearPageFade();
     return true;
@@ -165,7 +194,7 @@ for(const child of [...reader.children])if(child!==homePage)drawer.append(child)
 reader.append(drawer);homePage.classList.add('sg-home-layer');
 function paintHomeLayer(position){paint(homePage,'transform',`translate3d(0,${Math.max(0,Math.min(810,position))}px,0)`);}
 // Native reading pins this same node with CSS, without a scroll/paint compensation loop.
-function loadNear(){if(!galleryLoaded)return;const i=Math.floor(offset/810);if(i===loadedPage)return;loadedPage=i;pageImages.slice(Math.max(0,i-1),i+3).forEach(img=>img.loading='eager');for(const pair of dissolves)if(pair.index>=i-1&&pair.index<=i+2){pair.image.loading='eager';if(pair.step)pair.step.querySelector('img').loading='eager';}}
+function loadNear(){if(!galleryLoaded)return;const i=Math.floor(offset/810);if(i===loadedPage)return;loadedPage=i;pageImages.slice(Math.max(0,i-1),i+3).forEach(img=>hydrate(img));for(const pair of dissolves)if(pair.index>=i-1&&pair.index<=i+2){hydrate(pair.image);if(pair.step)hydrate(pair.step.querySelector('img'));}}
 function maxOffset(height=810){return Math.max(0,pageImages.length*810-height);}
 function windowGeometry(scale,y,height=810,x=0){
 // The visible aperture changes during zoom/resize; never scroll past the strip's bottom.
@@ -180,7 +209,7 @@ function launch(){
   if(phase!=='ready')return;loadGallery();
   if(!entryReady){
     if(!entryPending){entryPending=true;entryOrigin=scrollY;root.dataset.loading='images';entryTimeout=setTimeout(()=>{
-      if(entryPending&&phase==='ready'){entryPending=false;root.removeAttribute('data-loading');toReading(false);}
+      if(entryPending&&phase==='ready'){if(!mobileLoading){entryPending=false;root.removeAttribute('data-loading');toReading(false);}}
     },5000);}
     return;
   }
@@ -224,7 +253,7 @@ function approachHome(delta){
 }
 function rewindWindow(distance){
   flowSpeed=0;zoomTarget=zoomProgress;
-  const scale=760/1440+(1-760/1440)*zoomProgress;
+  const small=previewScale(),scale=small+(1-small)*zoomProgress;
   windowReadTarget=Math.max(0,(windowReadTarget??offset)-distance/(z*scale));
   if(offset<=.25)beginHomeReturn();else schedule();
 }
@@ -242,7 +271,7 @@ let measuredWidth=0,paintedCardsTime=-1,paintedCardsHeight=-1;
 function size(){
   // Safari toolbar changes height during a swipe; they do not resize the artboard.
   if(coarse.matches&&measuredWidth===innerWidth)return;
-  measuredWidth=innerWidth;dissolveIntent=null;stopReadingApproach();readingReturnArmed=false;if(pageFade)finishPageFade(pageFade.progress>=.5?1:0);z=document.body.getBoundingClientRect().width/1440;h=innerHeight/z;root.style.setProperty('--sg-h',h+'px');if(stageLocked&&!aligning)jump(base());if(phase!=='reading'){if(reloadPausedAt!==null)draw(reloadPausedAt);else schedule();}}
+  measuredWidth=innerWidth;if(mobileDissolveHold)releaseMobileHold();dissolveIntent=null;stopReadingApproach();readingReturnArmed=false;if(pageFade){if(coarse.matches)clearPageFade();else finishPageFade(pageFade.progress>=.5?1:0);}z=document.body.getBoundingClientRect().width/1440;h=innerHeight/z;root.style.setProperty('--sg-h',h+'px');if(stageLocked&&!aligning)jump(base());if(phase!=='reading'){if(reloadPausedAt!==null)draw(reloadPausedAt);else schedule();}}
 // Early velocity peak, extended deceleration; zero velocity/acceleration at both ends.
 const glide=t=>t*t*t*(35+t*(-105+t*(126+t*(-70+15*t))));
 function draw(now){raf=0;if(phase==='reading'||reduce.matches)return;if(aligning){frameTime=now;schedule();return;}
@@ -267,11 +296,11 @@ const rowVisibility=narrow?1-smooth(seg(Math.abs(y),rowPitch+cardHeight*.5,2*row
 if(!selected){x+=Math.sign(x)*440*focus;y+=Math.sign(y)*300*focus;}
 x+=Math.sign(x||1)*260*(1-enter);y+=Math.sign(y||1)*200*(1-enter);
 if(selected){homeX=x;homeY=y;homeVisibility=rowVisibility;}
-cards[idx].style.transform=`translate(-50%,-50%) translate(${x}px,${y}px) scale(${selected?1+(760/550-1)*focus:1-.68*focus})`;cards[idx].style.opacity=String(enter*(selected?0:1-leave)*rowVisibility);});
+cards[idx].style.transform=`translate(-50%,-50%) translate(${x}px,${y}px) scale(${selected?1+(previewScale()*1440/550-1)*focus:1-.68*focus})`;cards[idx].style.opacity=String(enter*(selected?0:1-leave)*rowVisibility);});
 }
-const small=760/1440;
+const small=previewScale();
 viewport.style.opacity=String(['ready','entry','travel','backMiddle','exitReady'].includes(phase)?enter*homeVisibility:1);
-if(['ready','entry','retract','parked','travel','backMiddle','exitReady'].includes(phase)){offset=phase==='retract'?reverseOffset*(1-glide(clamp(retractElapsed/1950))):0;const landingScale=(550+210*focus)/1440;windowGeometry(landingScale,(h-810*landingScale)/2+homeY,810,homeX);if(t>=7280&&phase==='entry'){setPhase('preview');previewStart=now;settle=now+220;}}
+if(['ready','entry','retract','parked','travel','backMiddle','exitReady'].includes(phase)){offset=phase==='retract'?reverseOffset*(1-glide(clamp(retractElapsed/1950))):0;const landingScale=(550+(small*1440-550)*focus)/1440;windowGeometry(landingScale,(h-810*landingScale)/2+homeY,810,homeX);if(t>=7280&&phase==='entry'){setPhase('preview');previewStart=now;settle=now+220;}}
 if(phase==='retract'&&retractElapsed===0&&retractDirection<0){setPhase('preview');previewStart=now-previewFlowDelay-previewFlowRamp;offset=reverseOffset;}
 if(phase==='retract'){viewport.style.opacity='1';cards[0].style.opacity='0';if(retractElapsed>=1950){offset=0;setPhase('parked');viewport.style.opacity='1';cards[0].style.opacity='0';settle=now+250;}}
 if(phase==='travel'&&now-start>=travelDuration){setPhase(travelRest);settle=now+250;}
@@ -369,23 +398,39 @@ addEventListener('keydown',e=>{if(middleScroll){stopMiddleScroll();if(e.key==='E
 
 // Native reading owns touch scrolling except while crossing an authored dissolve.
 let readingTouch=null;
-reader.addEventListener('touchstart',e=>{
+addEventListener('touchstart',e=>{
+  if(!coarse.matches&&!reader.contains(e.target)){readingTouch=null;return;}
+  if(coarse.matches&&mobileDissolveHold&&e.touches.length===1)releaseMobileHold();
   if(e.touches.length!==1){readingTouch=null;dissolveIntent=null;return;}
-  const t=e.touches[0];readingTouch={x:t.clientX,y:t.clientY};
-},{passive:true});
-reader.addEventListener('touchmove',e=>{
+  const t=e.touches[0];readingTouch={x:t.clientX,y:t.clientY};mobileScrollIntent=null;
+},{passive:true,capture:true});
+addEventListener('touchmove',e=>{
   if(!readingTouch||e.touches.length!==1||phase!=='reading'||reduce.matches)return;
   const t=e.touches[0],dy=readingTouch.y-t.clientY,dx=t.clientX-readingTouch.x;
   readingTouch={x:t.clientX,y:t.clientY};
   if(Math.abs(dy)<1||Math.abs(dx)>Math.abs(dy))return;
+  if(coarse.matches)mobileScrollIntent={direction:Math.sign(dy)};
   dissolveInput(dy,{preventDefault(){if(e.cancelable)e.preventDefault();}});
   if(dissolveIntent)dissolveIntent.touch=true;
-},{passive:false});
-reader.addEventListener('touchend',()=>{readingTouch=null;if(dissolveIntent?.touch)dissolveIntent.until=performance.now()+1100;},{passive:true});
-reader.addEventListener('touchcancel',()=>{readingTouch=null;dissolveIntent=null;},{passive:true});
+},{passive:false,capture:true});
+addEventListener('touchend',()=>{readingTouch=null;if(dissolveIntent?.touch)dissolveIntent.until=performance.now()+1100;},{passive:true});
+addEventListener('touchcancel',()=>{readingTouch=null;dissolveIntent=null;mobileScrollIntent=null;},{passive:true});
 // Also catch a pending native scroll frame that reaches the edge between wheel events.
 addEventListener('scroll',()=>{
+  if(coarse.matches&&mobileDissolveHold){if(Math.abs(scrollY-mobileDissolveHold.anchor)>.5)jump(mobileDissolveHold.anchor);return;}
+  if(coarse.matches&&pageFade?.kind==='reading'){
+    const f=pageFade,anchor=f.mode==='align'?f.origin+(f.source-f.origin)*out(clamp((performance.now()-f.start)/f.brakeDuration)):f.source;
+    if(Math.abs(scrollY-anchor)>.5)jump(anchor);readingLastY=scrollY;return;
+  }
   const y=scrollY,previousY=readingLastY,movingUp=y<previousY;readingLastY=y;
+  if(coarse.matches&&phase==='reading'&&!pageFade&&!reduce.matches&&mobileScrollIntent){
+    const target=mobileScrollIntent.direction>0?1:0,ordered=target?dissolves:[...dissolves].reverse();
+    for(const pair of ordered){
+      if(pair.unavailable||pair.waiting||pair.value===target)continue;
+      const edge=dissolveAnchor(pair);
+      if(target?previousY<=edge&&y>=edge:previousY>=edge&&y<=edge){beginPageFade(pair,target);return;}
+    }
+  }
   if(dissolveIntent?.touch&&performance.now()<=dissolveIntent.until)dissolveIntent.until=performance.now()+250;
   if(phase==='reading'&&!pageFade&&!reduce.matches&&dissolveIntent&&performance.now()<=dissolveIntent.until){
     const target=dissolveIntent.direction>0?1:0,ordered=target?dissolves:[...dissolves].reverse();
@@ -401,12 +446,12 @@ addEventListener('scroll',()=>{
   if(phase!=='reading'||reduce.matches||!readingReturnArmed||!movingUp||performance.now()>readingWheelUntil)return;
   if(root.getBoundingClientRect().top>=-.5)beginHomeReturn();
 },{passive:true});
-let touch=null;stage.addEventListener('touchstart',e=>{if(e.touches.length===1)touch={y:e.touches[0].clientY,fired:false};},{passive:true});stage.addEventListener('touchmove',e=>{if(!touch||e.touches.length!==1||phase==='reading'||reduce.matches||entryPending)return;const dy=touch.y-e.touches[0].clientY;if(phase==='exitReady'&&dy<0){unlockStage();nativeExit=true;touch.y=e.touches[0].clientY;return;}if(Math.abs(dy)>2){e.preventDefault();touch.y=e.touches[0].clientY;input(Math.sign(dy),!touch.fired,Math.abs(dy));touch.fired=true;}},{passive:false});stage.addEventListener('touchend',()=>touch=null);
+let touch=null;stage.addEventListener('touchstart',e=>{if(e.touches.length===1)touch={y:e.touches[0].clientY,fired:false};},{passive:true});stage.addEventListener('touchmove',e=>{if(!touch||e.touches.length!==1||phase==='reading'||reduce.matches||entryPending)return;const dy=touch.y-e.touches[0].clientY;if(phase==='exitReady'&&dy<0){unlockStage();nativeExit=true;touch.y=e.touches[0].clientY;return;}if(Math.abs(dy)>2){e.preventDefault();touch.y=e.touches[0].clientY;input(Math.sign(dy),!touch.fired,Math.abs(dy));touch.fired=true;}},{passive:false});stage.addEventListener('touchend',()=>touch=null);stage.addEventListener('touchcancel',()=>touch=null);
 addEventListener('keydown',e=>{
   if(e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey||e.target.closest?.('input,textarea,select,[contenteditable="true"]'))return;
   if(e.key==='Escape'&&readingApproach){e.preventDefault();stopReadingApproach();readingReturnArmed=false;return;}
   const readingKey=['ArrowUp','PageUp','ArrowDown','PageDown',' '].includes(e.key);
-  if(['Home','End','Escape'].includes(e.key))dissolveIntent=null;
+  if(['Home','End','Escape'].includes(e.key)){dissolveIntent=null;mobileScrollIntent=null;if(mobileDissolveHold)releaseMobileHold();}
   if(phase==='reading'&&!pageFade&&readingKey){
     const direction=['ArrowUp','PageUp'].includes(e.key)||e.key===' '&&e.shiftKey?-1:1;
     if(dissolveInput(direction*(e.key.startsWith('Arrow')?40:innerHeight*.8),e))return;
@@ -424,14 +469,15 @@ addEventListener('keydown',e=>{
 });
 addEventListener('click',e=>{
   const link=e.target.closest?.('a[href]');
-  if(link)dissolveIntent=null;
+  if(link){dissolveIntent=null;mobileScrollIntent=null;if(mobileDissolveHold)releaseMobileHold();}
   // The custom Top control prevents the native click and then animates scroll itself.
   const navigates=link&&(!e.defaultPrevented||link.getAttribute('href')==='#top')&&e.button===0&&!e.ctrlKey&&!e.metaKey;
   if(readingApproach&&navigates){stopReadingApproach();readingReturnArmed=false;}
   if(pageFade&&navigates)clearPageFade();
   if(stageLocked&&!e.defaultPrevented&&e.button===0&&!e.ctrlKey&&!e.metaKey&&link&&(!link.target||link.target==='_self'))toReading(false);
 });
-addEventListener('resize',size);reduce.addEventListener('change',()=>{if(reduce.matches){stopMiddleScroll();readingTouch=null;toReading(false);for(const pair of dissolves)setPageDissolve(pair,1);}});
+addEventListener('pagehide',releaseMobileHold);
+addEventListener('resize',size);reduce.addEventListener('change',()=>{if(reduce.matches){releaseMobileHold();stopMiddleScroll();readingTouch=null;toReading(false);for(const pair of dissolves)setPageDissolve(pair,1);}});
 function syncFadeAnchor(){
   dissolveIntent=null;const number=Number(location.hash.replace('#ppt-page-','')),page=document.getElementById('ppt-page-'+number);if(!page)return;
   if(phase!=='reading')toReading(false);
@@ -490,9 +536,17 @@ window.swarovskiReadingResume?.registerGallery({snapshot:snapshotGallery});
 restoreGallery(reloadGallery);
 stage.addEventListener('touchmove',e=>{if(e.touches.length===1)resumeReload();},{passive:true,capture:true});
 addEventListener('keydown',e=>{if(!e.ctrlKey&&!e.metaKey&&!e.altKey&&['ArrowDown','ArrowUp','PageDown','PageUp',' '].includes(e.key)&&(stageLocked||stage.contains(document.activeElement)))resumeReload();},{capture:true});
-const galleryObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){loadGallery();galleryObserver.disconnect();}},{rootMargin:'600px'});galleryObserver.observe(root);
+// Start the grid immediately; native lazy-loading must not let the lower CMF log race it.
+const following=[...document.querySelectorAll('.cmf-development picture.sg-mobile-deferred img')];
+function loadFollowing(){if(!mobileLoading||phase!=='reading')return;for(const img of following){if(!img.closest('picture')?.querySelector('source'))continue;const r=img.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight+(entryReady?300:0))hydrate(img);}}
+let followingFrame=0;
+addEventListener('scroll',()=>{if(!followingFrame)followingFrame=requestAnimationFrame(()=>{followingFrame=0;loadFollowing();});},{passive:true});
+addEventListener('pageshow',loadFollowing);
+if(mobileLoading){loadGallery();loadFollowing();}else{
+ const galleryObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){loadGallery();galleryObserver.disconnect();}},{rootMargin:'600px'});galleryObserver.observe(root);
+}
 const pages=[...reader.querySelectorAll('.sg-page')];
-const observer=new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting||phase!=='reading')continue;const i=pages.indexOf(e.target);pages.slice(Math.max(0,i-1),i+3).forEach(p=>{p.querySelectorAll('img').forEach(img=>img.loading='eager');const pair=dissolves.find(d=>d.source===p||d.page===p);if(pair){pair.image.loading='eager';if(pair.step)pair.step.querySelector('img').loading='eager';}});}},{rootMargin:'450px'});
+const observer=new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting||phase!=='reading')continue;const i=pages.indexOf(e.target);pages.slice(Math.max(0,i-1),i+3).forEach(p=>{p.querySelectorAll('img').forEach(img=>hydrate(img));const pair=dissolves.find(d=>d.source===p||d.page===p);if(pair){hydrate(pair.image);if(pair.step)hydrate(pair.step.querySelector('img'));}});}},{rootMargin:'450px'});
 pages.forEach(p=>{observer.observe(p);const img=p.querySelector('img');img.addEventListener('error',()=>p.querySelector('a').hidden=false);});
 })();
 
