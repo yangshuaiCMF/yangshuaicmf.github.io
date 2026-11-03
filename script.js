@@ -156,23 +156,21 @@ function settleMedia() {
   if (!touchMediaMode.matches) return;
   const candidate = centeredMedia();
   touchMedia.forEach(item => {
-    const r = item.visual.getBoundingClientRect();
-    if (r.bottom <= 0 || r.top >= innerHeight) item.stop(true);
-    else if (item !== candidate) item.stop(false);
+    if (item !== candidate) item.stop(true);
   });
   if (candidate) mediaSettleTimer = setTimeout(() => {
     if (centeredMedia() === candidate) candidate.play();
   }, 220);
 }
 
-function pauseTouchMedia() {
+function resetTouchMedia() {
   clearTimeout(mediaSettleTimer);
-  touchMedia.forEach(item => item.stop(false));
+  touchMedia.forEach(item => item.stop(touchMediaMode.matches));
 }
 
 addEventListener('touchstart', () => {
   mediaTouching = true;
-  if (touchMediaMode.matches) pauseTouchMedia();
+  if (touchMediaMode.matches) resetTouchMedia();
 }, {passive: true});
 for (const type of ['touchend', 'touchcancel']) addEventListener(type, event => {
   mediaTouching = event.touches.length > 0;
@@ -180,7 +178,7 @@ for (const type of ['touchend', 'touchcancel']) addEventListener(type, event => 
 }, {passive: true});
 addEventListener('scroll', () => {
   if (!touchMediaMode.matches) return;
-  pauseTouchMedia();
+  resetTouchMedia();
   if (!mediaScrollFrame) mediaScrollFrame = requestAnimationFrame(() => {
     mediaScrollFrame = 0; settleMedia();
   });
@@ -188,11 +186,11 @@ addEventListener('scroll', () => {
 addEventListener('resize', settleMedia, {passive: true});
 addEventListener('pageshow', settleMedia);
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) pauseTouchMedia();
+  if (document.hidden) resetTouchMedia();
   else settleMedia();
 });
 touchMediaMode.addEventListener('change', () => {
-  pauseTouchMedia();
+  resetTouchMedia();
   touchMedia.forEach(item => item.stop(true));
   mediaTouching = false; settleMedia();
 });
@@ -229,9 +227,9 @@ mediaTiles.forEach((tile) => {
     visual: tile.querySelector('.work-tile-visual'),
     stop(reset) {
       playVersion++;
+      if (reset) tile.classList.remove('is-playing');
       video.pause();
-      if (reset) {
-        tile.classList.remove('is-playing');
+      if (reset && video.currentTime !== 0) {
         try { video.currentTime = 0; } catch { /* Metadata may still be loading. */ }
       }
     },
@@ -243,6 +241,10 @@ mediaTiles.forEach((tile) => {
     if (playPromise) {
       playPromise.then(() => {
         if (version !== playVersion) return;
+        if (touchMediaMode.matches && centeredMedia() !== item) {
+          item.stop(true);
+          return;
+        }
         tile.classList.add('is-playing');
       }).catch(() => {
         if (version === playVersion) tile.classList.remove('is-playing');

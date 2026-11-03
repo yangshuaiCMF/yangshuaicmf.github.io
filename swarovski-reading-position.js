@@ -14,7 +14,9 @@
   window.swarovskiReadingResume={saved,registerGallery(api){gallery=api;}};
   const previousBehavior=html.style.scrollBehavior;
   if(saved){history.scrollRestoration='manual';html.style.scrollBehavior='auto';}
-  let snapshot=null,resizing=false,restoreFrame=0,settleTimer=0,captureFrame=0;
+  let snapshot=null,resizing=false,restoreFrame=0,settleTimer=0,captureFrame=0,persistTimer=0,touching=false,viewportWidth=innerWidth;
+  const coarse=matchMedia('(hover: none) and (pointer: coarse)');
+  const animationOwnsScroll=()=>html.matches('.sg-scroll-locked,.sg-dissolve-locked,.sg-home-approach-locked');
 
   function identify(element){
     if(element.id)return {id:element.id};
@@ -24,8 +26,7 @@
   function resolve(key){return key?.id?document.getElementById(key.id):Number.isInteger(key?.cmf)?document.querySelector('.cmf-development-grid')?.children[key.cmf]:null;}
   function persist(){
     if(restoring||resizing)return;
-    const element=chooseAnchor(),rect=element?.getBoundingClientRect();
-    const fraction=rect?(innerHeight*probeRatio-rect.top)/rect.height:0;
+    const element=snapshot?.element, fraction=snapshot?.fraction||0;
     try{sessionStorage.setItem(storageKey,JSON.stringify({version:1,route,anchor:element?identify(element):null,fraction,scrollY,gallery:gallery?.snapshot()}));}catch{}
   }
 
@@ -50,16 +51,16 @@
   }
   function capture(){
     captureFrame=0;
-    if(restoring||resizing||html.classList.contains('sg-scroll-locked'))return;
+    if(restoring||resizing||animationOwnsScroll())return;
     const element=chooseAnchor();if(!element)return;
     const rect=element.getBoundingClientRect(),probe=innerHeight*probeRatio;
     snapshot={element,fraction:Math.max(0,Math.min(1,(probe-rect.top)/rect.height))};
-    persist();
+    if(!persistTimer)persistTimer=setTimeout(()=>{persistTimer=0;persist();},250);
   }
   function queueCapture(){if(!captureFrame)captureFrame=requestAnimationFrame(capture);}
   function restore(){
     restoreFrame=0;
-    if(!snapshot||html.classList.contains('sg-scroll-locked')||!usable(snapshot.element))return;
+    if(!snapshot||touching||animationOwnsScroll()||!usable(snapshot.element))return;
     const rect=snapshot.element.getBoundingClientRect(),probe=innerHeight*probeRatio;
     const target=scrollY+rect.top+rect.height*snapshot.fraction-probe;
     scrollTo({top:Math.max(0,target),left:0,behavior:'instant'});
@@ -69,14 +70,20 @@
     restoreFrame=requestAnimationFrame(()=>{restoreFrame=requestAnimationFrame(restore);});
   }
   function resized(){
+    const width=innerWidth;
+    if(coarse.matches&&width===viewportWidth)return;
+    viewportWidth=width;
     if(restoring)return;
     if(!resizing){if(!snapshot)capture();resizing=true;}
     queueRestore();clearTimeout(settleTimer);
     settleTimer=setTimeout(()=>{restore();resizing=false;queueCapture();},180);
   }
+  addEventListener('touchstart',()=>{touching=true;if(resizing){cancelAnimationFrame(restoreFrame);clearTimeout(settleTimer);resizing=false;queueCapture();}},{passive:true});
+  addEventListener('touchend',()=>{touching=false;queueCapture();},{passive:true});
+  addEventListener('touchcancel',()=>{touching=false;queueCapture();},{passive:true});
   addEventListener('scroll',queueCapture,{passive:true});
   addEventListener('resize',resized,{passive:true});
-  addEventListener('pagehide',persist);
+  addEventListener('pagehide',()=>{clearTimeout(persistTimer);persistTimer=0;capture();persist();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)persist();});
   addEventListener('pageshow',event=>{
     if(!saved||event.persisted){restoring=false;requestAnimationFrame(capture);return;}
